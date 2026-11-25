@@ -210,287 +210,282 @@ export const CinemaVideoCard: React.FC = () => {
   const progressPct = duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0;
 
   return (
-    <div
-      className="desk-card"
-      style={{ "--hover-rot": "0.8deg" } as React.CSSProperties}
-    >
-      <div className="w-full max-w-4xl mx-auto rounded-3xl bg-zinc-950 text-white border border-zinc-800 shadow-2xl overflow-hidden ring-1 ring-white/10">
-        {/* Viewport Cinema ampio (min-h-[420px] per essere ben proporzionato e più grande dell'iPod) */}
-        <div className="relative min-h-[420px] sm:min-h-[460px] aspect-video bg-black overflow-hidden group select-none flex flex-col justify-between p-4 sm:p-5">
-          {currentVideo && parsedSource ? (
-            parsedSource.kind === "youtube" || parsedSource.kind === "vimeo" ? (
-              <iframe
-                key={currentVideo.id}
-                src={parsedSource.embedUrl}
-                title={currentVideo.title}
-                className="absolute inset-0 w-full h-full border-0 z-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                allowFullScreen
-              />
-            ) : (
-              <video
-                key={currentVideo.id}
-                ref={videoRef}
-                src={parsedSource.src}
-                playsInline
-                onClick={togglePlay}
-                onTimeUpdate={() => {
-                  if (videoRef.current) setCurrentTime(videoRef.current.currentTime);
-                }}
-                onLoadedMetadata={() => {
-                  if (videoRef.current) {
-                    setDuration(videoRef.current.duration || 0);
-                    videoRef.current.playbackRate = speed;
-                    videoRef.current.volume = volume / 100;
-                    videoRef.current.muted = isMuted;
-                  }
-                }}
-                onEnded={() => {
-                  setIsPlaying(false);
-                  if (videos.length > 1) handleNext();
-                }}
-                onError={() => setMediaError(true)}
-                className="absolute inset-0 w-full h-full object-contain bg-black cursor-pointer z-0"
-              />
-            )
-          ) : (
-            <img
-              src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop"
-              alt="Cinematic frame"
-              className="absolute inset-0 w-full h-full object-cover opacity-50"
-            />
-          )}
-
-          {!isEmbed && !isPlaying && (
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/65 pointer-events-none z-[1]" />
-          )}
-
-          {/* Top Badges */}
-          <div className="relative z-20 flex items-center justify-between pointer-events-none">
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-1 rounded-md bg-amber-500 text-black text-[11px] font-bold font-mono tracking-wider shadow-lg">
-                4K HDR
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-md border border-white/15 text-[11px] font-mono text-zinc-300">
-                {isEmbed ? "EMBED PLAYER" : "DOLBY ATMOS"}
-              </span>
-            </div>
-            <span className="px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-md border border-white/15 text-[11px] font-mono text-amber-300">
-              {videos.length} VIDEO
-            </span>
-          </div>
-
-          {/* Center Play Button & Title */}
-          {!isEmbed && (!isPlaying || mediaError) && (
-            <div className="relative z-10 text-center my-auto flex flex-col items-center pointer-events-none">
-              {mediaError ? (
-                <div className="bg-black/85 border border-rose-500/40 rounded-xl px-4 py-3 pointer-events-auto max-w-xs">
-                  <p className="text-xs text-rose-300 font-medium">
-                    Impossibile riprodurre direttamente questo link.
-                  </p>
-                  {currentVideo && (
-                    <a
-                      href={currentVideo.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block mt-2 text-xs font-mono text-amber-400 underline"
-                    >
-                      Apri link esterno ↗
-                    </a>
-                  )}
-                </div>
-              ) : (
-                <>
-                  <button
-                    type="button"
-                    onClick={
-                      currentVideo
-                        ? togglePlay
-                        : () => urlInputRef.current?.focus()
-                    }
-                    className="pointer-events-auto w-16 h-16 rounded-full bg-white text-zinc-950 flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all mb-3 cursor-pointer"
-                  >
-                    <svg className="w-7 h-7 fill-current translate-x-0.5" viewBox="0 0 24 24">
-                      <polygon points="5 3 19 12 5 21 5 3" />
-                    </svg>
-                  </button>
-                  <h3 className="text-lg font-semibold tracking-tight text-white drop-shadow px-3 line-clamp-2">
-                    {currentVideo ? currentVideo.title : "Nessun video caricato"}
-                  </h3>
-                  <p className="text-xs text-zinc-300 font-mono mt-1">
-                    {currentVideo
-                      ? `Traccia ${safeIndex + 1} di ${videos.length}`
-                      : "Incolla un link video qui sotto per iniziare"}
-                  </p>
-                </>
-              )}
-            </div>
-          )}
-
-          {/* Scrubber Bar */}
-          {!isEmbed && (
-            <div className="relative z-10">
-              <div
-                ref={scrubberRef}
-                onClick={handleScrub}
-                className="w-full h-2.5 bg-white/20 hover:h-3 rounded-full cursor-pointer relative transition-all overflow-hidden"
-              >
-                <div
-                  className="h-full bg-amber-400 rounded-full transition-[width] duration-100"
-                  style={{ width: `${progressPct}%` }}
+    /* block + [column-span:all] permette alla card di svilupparsi in LARGHEZZA anche dentro il layout a colonne */
+    <div className="block w-full [column-span:all] my-6">
+      <div className="w-full max-w-5xl mx-auto rounded-2xl bg-zinc-950 text-white border border-zinc-800 shadow-2xl overflow-hidden ring-1 ring-white/10 grid grid-cols-1 lg:grid-cols-12">
+        {/* COLONNA SINISTRA: Viewport 16:9 Cinema + Console Bar */}
+        <div className="lg:col-span-8 flex flex-col min-w-0">
+          <div className="relative aspect-video bg-black overflow-hidden group select-none flex flex-col justify-between p-4 sm:p-5">
+            {currentVideo && parsedSource ? (
+              parsedSource.kind === "youtube" || parsedSource.kind === "vimeo" ? (
+                <iframe
+                  key={currentVideo.id}
+                  src={parsedSource.embedUrl}
+                  title={currentVideo.title}
+                  className="absolute inset-0 w-full h-full border-0 z-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                  allowFullScreen
                 />
+              ) : (
+                <video
+                  key={currentVideo.id}
+                  ref={videoRef}
+                  src={parsedSource.src}
+                  playsInline
+                  onClick={togglePlay}
+                  onTimeUpdate={() => {
+                    if (videoRef.current) setCurrentTime(videoRef.current.currentTime);
+                  }}
+                  onLoadedMetadata={() => {
+                    if (videoRef.current) {
+                      setDuration(videoRef.current.duration || 0);
+                      videoRef.current.playbackRate = speed;
+                      videoRef.current.volume = volume / 100;
+                      videoRef.current.muted = isMuted;
+                    }
+                  }}
+                  onEnded={() => {
+                    setIsPlaying(false);
+                    if (videos.length > 1) handleNext();
+                  }}
+                  onError={() => setMediaError(true)}
+                  className="absolute inset-0 w-full h-full object-contain bg-black cursor-pointer z-0"
+                />
+              )
+            ) : (
+              <img
+                src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop"
+                alt="Cinematic frame"
+                className="absolute inset-0 w-full h-full object-cover opacity-50"
+              />
+            )}
+
+            {!isEmbed && !isPlaying && (
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/60 pointer-events-none z-[1]" />
+            )}
+
+            {/* Top Badges */}
+            <div className="relative z-20 flex items-center justify-between pointer-events-none">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-1 rounded-md bg-amber-500 text-black text-[11px] font-bold font-mono tracking-wider shadow-lg">
+                  4K HDR
+                </span>
+                <span className="px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-md border border-white/15 text-[11px] font-mono text-zinc-300">
+                  {isEmbed ? "EMBED PLAYER" : "DOLBY ATMOS"}
+                </span>
               </div>
             </div>
-          )}
-        </div>
 
-        {/* Console Controls Bar */}
-        <div className="px-5 py-3.5 bg-zinc-900/95 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2.5">
-            <button
-              type="button"
-              onClick={handlePrev}
-              disabled={videos.length <= 1}
-              title="Video precedente"
-              className="p-1.5 text-zinc-300 hover:text-white disabled:opacity-35 transition-colors cursor-pointer"
-            >
-              <SkipBack className="w-4 h-4" />
-            </button>
-
-            {!isEmbed && (
-              <button
-                type="button"
-                onClick={togglePlay}
-                disabled={!currentVideo}
-                title={isPlaying ? "Pausa" : "Riproduci"}
-                className="p-1.5 text-zinc-200 hover:text-white disabled:opacity-35 transition-colors cursor-pointer"
-              >
-                {isPlaying ? (
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <rect x="6" y="4" width="4" height="16" />
-                    <rect x="14" y="4" width="4" height="16" />
-                  </svg>
+            {/* Center Play Button & Title */}
+            {!isEmbed && (!isPlaying || mediaError) && (
+              <div className="relative z-10 text-center my-auto flex flex-col items-center pointer-events-none">
+                {mediaError ? (
+                  <div className="bg-black/85 border border-rose-500/40 rounded-xl px-4 py-3 pointer-events-auto max-w-xs">
+                    <p className="text-xs text-rose-300 font-medium">
+                      Impossibile riprodurre direttamente questo link.
+                    </p>
+                    {currentVideo && (
+                      <a
+                        href={currentVideo.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mt-2 text-xs font-mono text-amber-400 underline"
+                      >
+                        Apri link esterno ↗
+                      </a>
+                    )}
+                  </div>
                 ) : (
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <polygon points="5 3 19 12 5 21 5 3" />
-                  </svg>
+                  <>
+                    <button
+                      type="button"
+                      onClick={
+                        currentVideo
+                          ? togglePlay
+                          : () => urlInputRef.current?.focus()
+                      }
+                      className="pointer-events-auto w-16 h-16 rounded-full bg-white text-zinc-950 flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all mb-2 cursor-pointer"
+                    >
+                      <svg className="w-6 h-6 fill-current translate-x-0.5" viewBox="0 0 24 24">
+                        <polygon points="5 3 19 12 5 21 5 3" />
+                      </svg>
+                    </button>
+                    <h3 className="text-base sm:text-lg font-semibold tracking-tight text-white drop-shadow px-3 line-clamp-1">
+                      {currentVideo ? currentVideo.title : "Nessun video caricato"}
+                    </h3>
+                    <p className="text-xs text-zinc-300 font-mono mt-0.5">
+                      {currentVideo
+                        ? `Video ${safeIndex + 1} di ${videos.length}`
+                        : "Incolla un link video a destra"}
+                    </p>
+                  </>
                 )}
-              </button>
+              </div>
             )}
 
-            <button
-              type="button"
-              onClick={handleNext}
-              disabled={videos.length <= 1}
-              title="Video successivo"
-              className="p-1.5 text-zinc-300 hover:text-white disabled:opacity-35 transition-colors cursor-pointer"
-            >
-              <SkipForward className="w-4 h-4" />
-            </button>
-
-            {isEmbed ? (
-              <span className="font-mono text-zinc-300 truncate max-w-[170px]">
-                {currentVideo?.title}
-              </span>
-            ) : (
-              <span className="font-mono text-zinc-400">
-                <span className="text-zinc-200">{formatTime(currentTime)}</span> /{" "}
-                <span>{formatTime(duration)}</span>
-              </span>
+            {/* Scrubber Bar */}
+            {!isEmbed && (
+              <div className="relative z-10">
+                <div
+                  ref={scrubberRef}
+                  onClick={handleScrub}
+                  className="w-full h-2 bg-white/20 hover:h-2.5 rounded-full cursor-pointer relative transition-all overflow-hidden"
+                >
+                  <div
+                    className="h-full bg-amber-400 rounded-full transition-[width] duration-100"
+                    style={{ width: `${progressPct}%` }}
+                  />
+                </div>
+              </div>
             )}
           </div>
 
-          {!isEmbed && (
-            <div className="flex items-center gap-3">
+          {/* Console Controls Bar */}
+          <div className="px-5 py-3 bg-zinc-900/95 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2.5">
               <button
                 type="button"
-                onClick={cycleSpeed}
-                className="px-2 py-0.5 rounded bg-zinc-800 border border-zinc-700 font-mono text-[11px] text-zinc-300 cursor-pointer"
+                onClick={handlePrev}
+                disabled={videos.length <= 1}
+                title="Video precedente"
+                className="p-1.5 text-zinc-300 hover:text-white disabled:opacity-35 transition-colors cursor-pointer"
               >
-                {speed.toFixed(speed % 1 === 0 ? 1 : 2)}×
+                <SkipBack className="w-4 h-4" />
               </button>
 
-              <div className="flex items-center gap-2">
+              {!isEmbed && (
                 <button
                   type="button"
-                  onClick={() => setIsMuted((m) => !m)}
-                  className="text-zinc-400 hover:text-white cursor-pointer"
-                  aria-label={isMuted ? "Riattiva audio" : "Muto"}
+                  onClick={togglePlay}
+                  disabled={!currentVideo}
+                  title={isPlaying ? "Pausa" : "Riproduci"}
+                  className="p-1.5 text-zinc-200 hover:text-white disabled:opacity-35 transition-colors cursor-pointer"
                 >
-                  {isMuted || volume === 0 ? (
-                    <VolumeX className="w-4 h-4" />
+                  {isPlaying ? (
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <rect x="6" y="4" width="4" height="16" />
+                      <rect x="14" y="4" width="4" height="16" />
+                    </svg>
                   ) : (
-                    <Volume2 className="w-4 h-4" />
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
                   )}
                 </button>
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  value={isMuted ? 0 : volume}
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
-                    setVolume(val);
-                    setIsMuted(val === 0);
-                  }}
-                  className="w-16 h-1 bg-zinc-700 rounded appearance-none cursor-pointer accent-amber-400"
-                />
-              </div>
+              )}
+
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={videos.length <= 1}
+                title="Video successivo"
+                className="p-1.5 text-zinc-300 hover:text-white disabled:opacity-35 transition-colors cursor-pointer"
+              >
+                <SkipForward className="w-4 h-4" />
+              </button>
+
+              {isEmbed ? (
+                <span className="font-mono text-zinc-300 truncate max-w-[200px]">
+                  {currentVideo?.title}
+                </span>
+              ) : (
+                <span className="font-mono text-zinc-400">
+                  <span className="text-zinc-200">{formatTime(currentTime)}</span> /{" "}
+                  <span>{formatTime(duration)}</span>
+                </span>
+              )}
             </div>
-          )}
+
+            {!isEmbed && (
+              <div className="flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={cycleSpeed}
+                  className="px-2 py-0.5 rounded bg-zinc-800 border border-zinc-700 font-mono text-[11px] text-zinc-300 cursor-pointer"
+                >
+                  {speed.toFixed(speed % 1 === 0 ? 1 : 2)}×
+                </button>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsMuted((m) => !m)}
+                    className="text-zinc-400 hover:text-white cursor-pointer"
+                    aria-label={isMuted ? "Riattiva audio" : "Muto"}
+                  >
+                    {isMuted || volume === 0 ? (
+                      <VolumeX className="w-4 h-4" />
+                    ) : (
+                      <Volume2 className="w-4 h-4" />
+                    )}
+                  </button>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    value={isMuted ? 0 : volume}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      setVolume(val);
+                      setIsMuted(val === 0);
+                    }}
+                    className="w-16 h-1 bg-zinc-700 rounded appearance-none cursor-pointer accent-amber-400"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Deck inferiore stile iPod: Carica Video da Link + Playlist salvata */}
-        <div className="p-4 sm:p-5 bg-zinc-950 border-t border-zinc-800/90 space-y-3">
+        {/* COLONNA DESTRA: Carica Video (solo link) + Playlist stile iPod */}
+        <div className="lg:col-span-4 bg-zinc-900/60 border-t lg:border-t-0 lg:border-l border-zinc-800 p-4 flex flex-col justify-between gap-3 min-w-0">
           <form onSubmit={handleAddVideo} className="space-y-2">
             <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-amber-400 font-bold">
               <span className="flex items-center gap-1.5">
                 <Link2 className="w-3.5 h-3.5" />
-                Carica Video (solo link)
+                Carica Video
               </span>
-              <span className="text-zinc-500">YouTube · Vimeo · MP4</span>
+              <span className="text-zinc-500 text-[10px]">{videos.length} salvati</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+            <input
+              type="text"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              placeholder="Titolo (opzionale)"
+              className="w-full px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-400"
+            />
+            <div className="flex gap-1.5">
               <input
-                type="text"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-                placeholder="Titolo (opzionale)"
-                className="sm:col-span-4 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-400"
+                ref={urlInputRef}
+                type="url"
+                value={newUrl}
+                onChange={(e) => {
+                  setNewUrl(e.target.value);
+                  if (urlError) setUrlError("");
+                }}
+                placeholder="Link YouTube, Vimeo, .mp4"
+                className="flex-1 min-w-0 px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-400"
               />
-              <div className="sm:col-span-8 flex gap-2">
-                <input
-                  ref={urlInputRef}
-                  type="url"
-                  value={newUrl}
-                  onChange={(e) => {
-                    setNewUrl(e.target.value);
-                    if (urlError) setUrlError("");
-                  }}
-                  placeholder="Incolla link video..."
-                  className="flex-1 min-w-0 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-400"
-                />
-                <button
-                  type="submit"
-                  className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs flex items-center gap-1 cursor-pointer shrink-0 transition"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Carica</span>
-                </button>
-              </div>
+              <button
+                type="submit"
+                title="Aggiungi video"
+                className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs flex items-center gap-1 cursor-pointer shrink-0 transition"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
             </div>
 
             {urlError && (
-              <p className="text-[11px] text-rose-400 font-mono">{urlError}</p>
+              <p className="text-[10px] text-rose-400 font-mono">{urlError}</p>
             )}
           </form>
 
           {/* Lista tracce video */}
-          <div className="max-h-44 overflow-y-auto space-y-1.5 pr-1">
+          <div className="flex-1 min-h-[150px] max-h-[260px] overflow-y-auto space-y-1.5 pr-1">
             {videos.length === 0 ? (
-              <div className="text-center py-5 text-xs font-mono text-zinc-500 border border-dashed border-zinc-800 rounded-xl">
-                Nessun video salvato in libreria.
+              <div className="text-center py-6 text-xs font-mono text-zinc-500 border border-dashed border-zinc-800 rounded-xl">
+                Nessun video salvato.
               </div>
             ) : (
               videos.map((v, idx) => {
@@ -499,15 +494,15 @@ export const CinemaVideoCard: React.FC = () => {
                   <div
                     key={v.id}
                     onClick={() => setCurrentIndex(idx)}
-                    className={`flex items-center justify-between gap-2.5 px-3 py-2 rounded-xl border cursor-pointer transition ${
+                    className={`flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg border cursor-pointer transition ${
                       active
                         ? "bg-amber-500/15 border-amber-400/50 text-amber-200"
-                        : "bg-zinc-900/70 hover:bg-zinc-900 border-zinc-800/80 text-zinc-300"
+                        : "bg-zinc-950/70 hover:bg-zinc-900 border-zinc-800/80 text-zinc-300"
                     }`}
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex items-center gap-2 min-w-0">
                       <Film
-                        className={`w-4 h-4 shrink-0 ${
+                        className={`w-3.5 h-3.5 shrink-0 ${
                           active ? "text-amber-400" : "text-zinc-500"
                         }`}
                       />
@@ -525,7 +520,7 @@ export const CinemaVideoCard: React.FC = () => {
                       type="button"
                       onClick={(e) => handleRemoveVideo(e, v.id)}
                       aria-label="Rimuovi video"
-                      className="p-1.5 text-zinc-500 hover:text-rose-400 cursor-pointer shrink-0"
+                      className="p-1 text-zinc-500 hover:text-rose-400 cursor-pointer shrink-0"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
