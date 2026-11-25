@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import DiacriticsArchPad from "./components/DiacriticsArchPad";
 
 const DESK_EMOJIS = ['🀄', '🇯🇵', '🇨🇳', '🇰🇷', '🇷🇺', '🇬🇧', '📌', '📚', '🥋', '💭', '🎧', '🪆', '🎙️', '📺', '🎲'];
 
@@ -45,21 +46,14 @@ export default function App() {
         <a href="https://lingua-cinese.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item cinese" data-tooltip="Lingua Cinese">🀄</a>
         <a href="https://scuola-virtuale.netlify.app/" target="_blank" rel="noopener noreferrer" className="dock-item school" data-tooltip="Scuola Virtuale">🎓</a>
         <a href="pdf-home.html" target="_blank" rel="noopener noreferrer" className="dock-item eserciziario" data-tooltip="Pdf Home">✍</a>
-        <a href="https://lingua-cireana.netlify.app/" target="_blank" rel="noopener noreferrer" className="dock-item coreano" data-tooltip="Lingua Coreana">🇰🇷</a>
-        <a href="https://mela-os.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item apple" data-tooltip="IPad Scriba">🍎</a>
+        <a href="https://linguacoreana.netlify.app/" target="_blank" rel="noopener noreferrer" className="dock-item coreano" data-tooltip="Lingua Coreana">🇰🇷</a>
+        <a href="https://chinese-os-cell.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item apple" data-tooltip="Cinese OS">📱</a>
         <a href="https://photo-finder-kohl.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item immagini" data-tooltip="Ricerca immagini">🖼</a>
-        <a href="https://ricettario-internazionale.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item ricettario" data-tooltip="Ricettario">🍳</a>
-        <a href="https://film-finder-indol.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item film" data-tooltip="Film">🎬</a>
         <a href="https://winamp-swart.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Musica" data-tooltip="Musica">🎧</a>
-        <a href="https://ide-core.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Coding" data-tooltip="Edu Code">💻</a>
-        <a href="https://tutor-programmazione.netlify.app/" target="_blank" rel="noopener noreferrer" className="dock-item Tutor" data-tooltip="Tutor">🖥</a>
         <a href="social.html" target="_blank" rel="noopener noreferrer" className="dock-item Social" data-tooltip="Social">👥</a>
         <a href="https://bunko-rho.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Editor" data-tooltip="Bunko">📝</a>
-        <a href="https://playground-web-ten.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Playground" data-tooltip="Playground">🖲</a>
-        <a href="https://code-editor-khaki-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Code-Editor" data-tooltip="Code-Editor">🖱</a>
         <a href="https://ufficio-virtuale.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Ufficio-Virtuale" data-tooltip="Ufficio-Virtuale">🧰</a>
-        <a href="https://web-coding-study-studio.ai.studio/" target="_blank" rel="noopener noreferrer" className="dock-item LearnCode" data-tooltip="LearnCode">📱</a>
-        <a href="BlogCraft.html" target="_blank" rel="noopener noreferrer" className="dock-item BlogCraft" data-tooltip="BlogCraft">🌐</a>
+         <a href="BlogCraft.html" target="_blank" rel="noopener noreferrer" className="dock-item BlogCraft" data-tooltip="BlogCraft">🌐</a>
       </nav>
 
       {/* 3. HEADER SEGNAPOSTO */}
@@ -100,10 +94,7 @@ export default function App() {
 
           {/* SEGNAPOSTO 3 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '0.5deg' } as any}>
-            <div className="w-full min-h-[260px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 03</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 3</p>
-            </div>
+            <DiacriticsArchPad />
           </div>
 
           {/* SEGNAPOSTO 4 */}
