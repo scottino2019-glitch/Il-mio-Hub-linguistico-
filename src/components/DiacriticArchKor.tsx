@@ -236,7 +236,7 @@ function backspaceHangul(current: string): string {
   return rest;
 }
 
-export function HangulBatchimPad({
+export function DiacriticsArchKor({
   charSets = DEFAULT_SETS,
   initialValue = '한글 · 닦 · 값',
 }: {
