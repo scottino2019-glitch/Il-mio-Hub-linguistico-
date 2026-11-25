@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { LayoutGrid, PlusSquare } from 'lucide-react';
 import { DiacriticsArchPad } from "./components/DiacriticsArchPad";
+import {StaticWhiteBoard } from "./components/StaticWhiteBoard";
 
 const DESK_EMOJIS = ['🀄', '🇯🇵', '🇨🇳', '🇰🇷', '🇷🇺', '🇬🇧', '📌', '📚', '🥋', '💭', '🎧', '🪆', '🎙️', '📺', '🎲'];
 
@@ -140,11 +141,7 @@ export default function App() {
 
           {/* SEGNAPOSTO 5 (in attesa del file src/components/StaticWhiteboard.jsx) */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1.5deg' } as any}>
-            <div className="w-full min-h-[300px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 05</span>
-              <p className="text-sm text-slate-500 mt-1">Crea StaticWhiteboard.jsx per inserirla qui</p>
-            </div>
+            <StaticWhiteBoard />
           </div>
 
           {/* SEGNAPOSTO 6 */}
