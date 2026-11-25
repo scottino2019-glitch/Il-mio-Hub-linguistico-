@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { ListVideo, Plus, SkipBack, SkipForward, Trash2, Volume2, VolumeX } from "lucide-react";
+import { Film, Link2, Plus, SkipBack, SkipForward, Trash2, Volume2, VolumeX } from "lucide-react";
 
 export interface VideoLinkItem {
   id: string;
@@ -12,7 +12,7 @@ const STORAGE_KEY = "cinema_video_links_v1";
 const DEFAULT_VIDEOS: VideoLinkItem[] = [
   {
     id: "sample-1",
-    title: "Demo: Big Buck Bunny",
+    title: "Demo: For Bigger Escapes",
     url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
   },
 ];
@@ -36,7 +36,6 @@ type ParsedSource =
 function parseVideoSource(rawUrl: string): ParsedSource {
   const url = rawUrl.trim();
 
-  // YouTube (watch, youtu.be, shorts, embed)
   const ytMatch = url.match(
     /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
   );
@@ -47,7 +46,6 @@ function parseVideoSource(rawUrl: string): ParsedSource {
     };
   }
 
-  // Vimeo
   const vimeoMatch = url.match(/(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/);
   if (vimeoMatch?.[1]) {
     return {
@@ -73,7 +71,6 @@ function formatTime(totalSeconds: number): string {
 export const CinemaVideoCard: React.FC = () => {
   const [videos, setVideos] = useState<VideoLinkItem[]>(() => loadSavedVideos());
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   // Form caricamento solo con link
   const [newTitle, setNewTitle] = useState<string>("");
@@ -83,6 +80,7 @@ export const CinemaVideoCard: React.FC = () => {
   // Stato player HTML5
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const scrubberRef = useRef<HTMLDivElement | null>(null);
+  const urlInputRef = useRef<HTMLInputElement | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
@@ -109,7 +107,6 @@ export const CinemaVideoCard: React.FC = () => {
 
   const isEmbed = parsedSource?.kind === "youtube" || parsedSource?.kind === "vimeo";
 
-  // Reset playback stats when track changes
   useEffect(() => {
     setIsPlaying(false);
     setCurrentTime(0);
@@ -117,7 +114,6 @@ export const CinemaVideoCard: React.FC = () => {
     setMediaError(false);
   }, [currentVideo?.id, currentVideo?.url]);
 
-  // Sync volume & speed to HTML5 <video>
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
@@ -197,7 +193,6 @@ export const CinemaVideoCard: React.FC = () => {
     setNewTitle("");
     setNewUrl("");
     setUrlError("");
-    setMenuOpen(false);
   };
 
   const handleRemoveVideo = (e: React.MouseEvent, id: string) => {
@@ -219,10 +214,9 @@ export const CinemaVideoCard: React.FC = () => {
       className="desk-card"
       style={{ "--hover-rot": "0.8deg" } as React.CSSProperties}
     >
-      <div className="w-full max-w-2xl mx-auto rounded-2xl bg-zinc-950 text-white border border-zinc-800 shadow-2xl overflow-hidden ring-1 ring-white/10">
-        {/* Viewport 16:9 Cinema */}
-        <div className="relative aspect-video bg-black overflow-hidden group select-none flex flex-col justify-between p-4 sm:p-5">
-          {/* Player reale: YouTube / Vimeo iframe oppure <video> HTML5 */}
+      <div className="w-full max-w-4xl mx-auto rounded-3xl bg-zinc-950 text-white border border-zinc-800 shadow-2xl overflow-hidden ring-1 ring-white/10">
+        {/* Viewport Cinema ampio (min-h-[420px] per essere ben proporzionato e più grande dell'iPod) */}
+        <div className="relative min-h-[420px] sm:min-h-[460px] aspect-video bg-black overflow-hidden group select-none flex flex-col justify-between p-4 sm:p-5">
           {currentVideo && parsedSource ? (
             parsedSource.kind === "youtube" || parsedSource.kind === "vimeo" ? (
               <iframe
@@ -267,120 +261,30 @@ export const CinemaVideoCard: React.FC = () => {
             />
           )}
 
-          {/* Gradiente leggero ai bordi solo quando non c'è iframe attivo o in pausa */}
           {!isEmbed && !isPlaying && (
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/65 pointer-events-none z-[1]" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/65 pointer-events-none z-[1]" />
           )}
 
-          {/* Top Badges + Pulsante Playlist / Carica Link */}
+          {/* Top Badges */}
           <div className="relative z-20 flex items-center justify-between pointer-events-none">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded-md bg-amber-500 text-black text-[10px] font-bold font-mono tracking-wider shadow-lg">
+              <span className="px-2.5 py-1 rounded-md bg-amber-500 text-black text-[11px] font-bold font-mono tracking-wider shadow-lg">
                 4K HDR
               </span>
-              <span className="px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-md border border-white/15 text-[10px] font-mono text-zinc-300">
-                {isEmbed ? "EMBED LINK" : "VIDEO LINK"}
+              <span className="px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-md border border-white/15 text-[11px] font-mono text-zinc-300">
+                {isEmbed ? "EMBED PLAYER" : "DOLBY ATMOS"}
               </span>
             </div>
-
-            <div className="relative pointer-events-auto">
-              <button
-                type="button"
-                onClick={() => setMenuOpen((o) => !o)}
-                className="px-2.5 py-1 rounded-md bg-black/70 hover:bg-black/90 backdrop-blur-md border border-white/20 text-[11px] font-medium text-white flex items-center gap-1.5 transition-colors cursor-pointer"
-              >
-                <ListVideo className="w-3.5 h-3.5 text-amber-400" />
-                <span>Playlist ({videos.length})</span>
-              </button>
-
-              {menuOpen && (
-                <div className="absolute top-9 right-0 w-72 bg-zinc-900/95 backdrop-blur-md border border-zinc-700 rounded-xl p-2.5 shadow-2xl z-30 space-y-2.5">
-                  {/* Form carica video da link */}
-                  <form onSubmit={handleAddVideo} className="space-y-1.5 pb-2 border-b border-zinc-800">
-                    <div className="text-[10px] font-mono text-amber-400 uppercase font-bold">
-                      + Carica Video da Link
-                    </div>
-                    <input
-                      type="text"
-                      value={newTitle}
-                      onChange={(e) => setNewTitle(e.target.value)}
-                      placeholder="Titolo (opzionale)"
-                      className="w-full px-2 py-1 rounded-lg bg-zinc-950 border border-zinc-700 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-400"
-                    />
-                    <div className="flex gap-1.5">
-                      <input
-                        type="url"
-                        value={newUrl}
-                        onChange={(e) => {
-                          setNewUrl(e.target.value);
-                          if (urlError) setUrlError("");
-                        }}
-                        placeholder="Link YouTube, Vimeo o .mp4"
-                        className="flex-1 min-w-0 px-2 py-1 rounded-lg bg-zinc-950 border border-zinc-700 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-400"
-                      />
-                      <button
-                        type="submit"
-                        title="Aggiungi link"
-                        className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs flex items-center gap-1 cursor-pointer shrink-0"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                    {urlError && (
-                      <p className="text-[10px] text-rose-400 font-mono">{urlError}</p>
-                    )}
-                  </form>
-
-                  {/* Lista video salvati */}
-                  <div className="max-h-36 overflow-y-auto space-y-1 pr-0.5">
-                    {videos.length === 0 ? (
-                      <p className="text-[11px] text-zinc-400 text-center py-3 font-mono">
-                        Nessun video in playlist.
-                      </p>
-                    ) : (
-                      videos.map((v, idx) => (
-                        <div
-                          key={v.id}
-                          onClick={() => {
-                            setCurrentIndex(idx);
-                            setMenuOpen(false);
-                          }}
-                          className={`flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg cursor-pointer text-xs transition ${
-                            idx === safeIndex
-                              ? "bg-amber-500/20 border border-amber-400/40 text-amber-200"
-                              : "hover:bg-white/10 text-zinc-200"
-                          }`}
-                        >
-                          <div className="min-w-0">
-                            <div className="font-medium truncate">
-                              {idx + 1}. {v.title}
-                            </div>
-                            <div className="text-[9px] font-mono text-zinc-400 truncate">
-                              {v.url}
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={(e) => handleRemoveVideo(e, v.id)}
-                            aria-label="Rimuovi video"
-                            className="p-1 text-zinc-400 hover:text-rose-400 cursor-pointer shrink-0"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
+            <span className="px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-md border border-white/15 text-[11px] font-mono text-amber-300">
+              {videos.length} VIDEO
+            </span>
           </div>
 
-          {/* Center Play Overlay (solo per link video diretti in pausa o errore) */}
+          {/* Center Play Button & Title */}
           {!isEmbed && (!isPlaying || mediaError) && (
             <div className="relative z-10 text-center my-auto flex flex-col items-center pointer-events-none">
               {mediaError ? (
-                <div className="bg-black/80 border border-rose-500/40 rounded-xl px-4 py-3 pointer-events-auto max-w-xs">
+                <div className="bg-black/85 border border-rose-500/40 rounded-xl px-4 py-3 pointer-events-auto max-w-xs">
                   <p className="text-xs text-rose-300 font-medium">
                     Impossibile riprodurre direttamente questo link.
                   </p>
@@ -389,7 +293,7 @@ export const CinemaVideoCard: React.FC = () => {
                       href={currentVideo.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-block mt-2 text-[11px] font-mono text-amber-400 underline"
+                      className="inline-block mt-2 text-xs font-mono text-amber-400 underline"
                     >
                       Apri link esterno ↗
                     </a>
@@ -399,33 +303,37 @@ export const CinemaVideoCard: React.FC = () => {
                 <>
                   <button
                     type="button"
-                    onClick={currentVideo ? togglePlay : () => setMenuOpen(true)}
-                    className="pointer-events-auto w-14 h-14 rounded-full bg-white text-zinc-950 flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all mb-2 cursor-pointer"
+                    onClick={
+                      currentVideo
+                        ? togglePlay
+                        : () => urlInputRef.current?.focus()
+                    }
+                    className="pointer-events-auto w-16 h-16 rounded-full bg-white text-zinc-950 flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all mb-3 cursor-pointer"
                   >
-                    <svg className="w-6 h-6 fill-current translate-x-0.5" viewBox="0 0 24 24">
+                    <svg className="w-7 h-7 fill-current translate-x-0.5" viewBox="0 0 24 24">
                       <polygon points="5 3 19 12 5 21 5 3" />
                     </svg>
                   </button>
-                  <h3 className="text-sm sm:text-base font-semibold tracking-tight text-white drop-shadow line-clamp-1 px-2">
-                    {currentVideo ? currentVideo.title : "Carica un video con link"}
+                  <h3 className="text-lg font-semibold tracking-tight text-white drop-shadow px-3 line-clamp-2">
+                    {currentVideo ? currentVideo.title : "Nessun video caricato"}
                   </h3>
-                  <p className="text-[11px] text-zinc-300 font-mono mt-0.5">
+                  <p className="text-xs text-zinc-300 font-mono mt-1">
                     {currentVideo
-                      ? `Video ${safeIndex + 1} di ${videos.length}`
-                      : "Apri Playlist in alto per incollare un URL"}
+                      ? `Traccia ${safeIndex + 1} di ${videos.length}`
+                      : "Incolla un link video qui sotto per iniziare"}
                   </p>
                 </>
               )}
             </div>
           )}
 
-          {/* Scrubber Bar (per video HTML5) */}
+          {/* Scrubber Bar */}
           {!isEmbed && (
             <div className="relative z-10">
               <div
                 ref={scrubberRef}
                 onClick={handleScrub}
-                className="w-full h-2 bg-white/20 hover:h-2.5 rounded-full cursor-pointer relative transition-all overflow-hidden"
+                className="w-full h-2.5 bg-white/20 hover:h-3 rounded-full cursor-pointer relative transition-all overflow-hidden"
               >
                 <div
                   className="h-full bg-amber-400 rounded-full transition-[width] duration-100"
@@ -436,9 +344,9 @@ export const CinemaVideoCard: React.FC = () => {
           )}
         </div>
 
-        {/* Console Controls Bar stile iPod */}
-        <div className="px-4 sm:px-5 py-3 bg-zinc-900/95 border-t border-zinc-800 flex items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-2 min-w-0">
+        {/* Console Controls Bar */}
+        <div className="px-5 py-3.5 bg-zinc-900/95 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={handlePrev}
@@ -481,64 +389,150 @@ export const CinemaVideoCard: React.FC = () => {
             </button>
 
             {isEmbed ? (
-              <span className="font-mono text-[11px] text-zinc-300 truncate max-w-[140px] sm:max-w-[200px]">
+              <span className="font-mono text-zinc-300 truncate max-w-[170px]">
                 {currentVideo?.title}
               </span>
             ) : (
-              <span className="font-mono text-zinc-400 text-[11px] whitespace-nowrap">
+              <span className="font-mono text-zinc-400">
                 <span className="text-zinc-200">{formatTime(currentTime)}</span> /{" "}
                 <span>{formatTime(duration)}</span>
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
-            {!isEmbed && (
-              <>
+          {!isEmbed && (
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={cycleSpeed}
+                className="px-2 py-0.5 rounded bg-zinc-800 border border-zinc-700 font-mono text-[11px] text-zinc-300 cursor-pointer"
+              >
+                {speed.toFixed(speed % 1 === 0 ? 1 : 2)}×
+              </button>
+
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={cycleSpeed}
-                  className="px-2 py-0.5 rounded bg-zinc-800 border border-zinc-700 font-mono text-[11px] text-zinc-300 cursor-pointer"
+                  onClick={() => setIsMuted((m) => !m)}
+                  className="text-zinc-400 hover:text-white cursor-pointer"
+                  aria-label={isMuted ? "Riattiva audio" : "Muto"}
                 >
-                  {speed.toFixed(speed % 1 === 0 ? 1 : 2)}×
+                  {isMuted || volume === 0 ? (
+                    <VolumeX className="w-4 h-4" />
+                  ) : (
+                    <Volume2 className="w-4 h-4" />
+                  )}
                 </button>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={isMuted ? 0 : volume}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    setVolume(val);
+                    setIsMuted(val === 0);
+                  }}
+                  className="w-16 h-1 bg-zinc-700 rounded appearance-none cursor-pointer accent-amber-400"
+                />
+              </div>
+            </div>
+          )}
+        </div>
 
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => setIsMuted((m) => !m)}
-                    className="text-zinc-400 hover:text-white cursor-pointer"
-                    aria-label={isMuted ? "Riattiva audio" : "Muto"}
-                  >
-                    {isMuted || volume === 0 ? (
-                      <VolumeX className="w-4 h-4" />
-                    ) : (
-                      <Volume2 className="w-4 h-4" />
-                    )}
-                  </button>
-                  <input
-                    type="range"
-                    min={0}
-                    max={100}
-                    value={isMuted ? 0 : volume}
-                    onChange={(e) => {
-                      const val = Number(e.target.value);
-                      setVolume(val);
-                      setIsMuted(val === 0);
-                    }}
-                    className="w-14 sm:w-16 h-1 bg-zinc-700 rounded appearance-none cursor-pointer accent-amber-400"
-                  />
-                </div>
-              </>
+        {/* Deck inferiore stile iPod: Carica Video da Link + Playlist salvata */}
+        <div className="p-4 sm:p-5 bg-zinc-950 border-t border-zinc-800/90 space-y-3">
+          <form onSubmit={handleAddVideo} className="space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-amber-400 font-bold">
+              <span className="flex items-center gap-1.5">
+                <Link2 className="w-3.5 h-3.5" />
+                Carica Video (solo link)
+              </span>
+              <span className="text-zinc-500">YouTube · Vimeo · MP4</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+              <input
+                type="text"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                placeholder="Titolo (opzionale)"
+                className="sm:col-span-4 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-400"
+              />
+              <div className="sm:col-span-8 flex gap-2">
+                <input
+                  ref={urlInputRef}
+                  type="url"
+                  value={newUrl}
+                  onChange={(e) => {
+                    setNewUrl(e.target.value);
+                    if (urlError) setUrlError("");
+                  }}
+                  placeholder="Incolla link video..."
+                  className="flex-1 min-w-0 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-400"
+                />
+                <button
+                  type="submit"
+                  className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs flex items-center gap-1 cursor-pointer shrink-0 transition"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Carica</span>
+                </button>
+              </div>
+            </div>
+
+            {urlError && (
+              <p className="text-[11px] text-rose-400 font-mono">{urlError}</p>
             )}
+          </form>
 
-            <button
-              type="button"
-              onClick={() => setMenuOpen((o) => !o)}
-              className="px-2 py-0.5 rounded bg-amber-500/15 border border-amber-400/30 text-amber-300 font-mono text-[10px] hover:bg-amber-500/25 cursor-pointer"
-            >
-              + Link
-            </button>
+          {/* Lista tracce video */}
+          <div className="max-h-44 overflow-y-auto space-y-1.5 pr-1">
+            {videos.length === 0 ? (
+              <div className="text-center py-5 text-xs font-mono text-zinc-500 border border-dashed border-zinc-800 rounded-xl">
+                Nessun video salvato in libreria.
+              </div>
+            ) : (
+              videos.map((v, idx) => {
+                const active = idx === safeIndex;
+                return (
+                  <div
+                    key={v.id}
+                    onClick={() => setCurrentIndex(idx)}
+                    className={`flex items-center justify-between gap-2.5 px-3 py-2 rounded-xl border cursor-pointer transition ${
+                      active
+                        ? "bg-amber-500/15 border-amber-400/50 text-amber-200"
+                        : "bg-zinc-900/70 hover:bg-zinc-900 border-zinc-800/80 text-zinc-300"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <Film
+                        className={`w-4 h-4 shrink-0 ${
+                          active ? "text-amber-400" : "text-zinc-500"
+                        }`}
+                      />
+                      <div className="min-w-0">
+                        <div className="text-xs font-semibold truncate">
+                          {idx + 1}. {v.title}
+                        </div>
+                        <div className="text-[10px] font-mono text-zinc-500 truncate">
+                          {v.url}
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={(e) => handleRemoveVideo(e, v.id)}
+                      aria-label="Rimuovi video"
+                      className="p-1.5 text-zinc-500 hover:text-rose-400 cursor-pointer shrink-0"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </div>
