@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './DiacriticsArchPad.css';
+import './DiacriticsArchKor.css';
 
 const DEFAULT_SETS: Record<string, string[]> = {
   Consonanti: [
