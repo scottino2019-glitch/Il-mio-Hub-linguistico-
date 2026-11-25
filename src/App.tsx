@@ -1,3 +1,4 @@
+
 import { useMemo } from 'react';
 import { LayoutGrid, PlusSquare } from 'lucide-react';
 import { DiacriticsArchPad } from "./components/DiacriticsArchPad";
@@ -142,6 +143,7 @@ export default function App() {
           {/* SEGNAPOSTO 5 (in attesa del file src/components/StaticWhiteboard.jsx) */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1.5deg' } as any}>
             <StaticWhiteBoard />
+            
           </div>
 
           {/* SEGNAPOSTO 6 */}
