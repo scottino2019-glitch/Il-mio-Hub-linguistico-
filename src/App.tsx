@@ -8,7 +8,7 @@ import { RojiCard, SmartphoneCard, PinkPdfNotebookCard, AgendaKanjiCard,  BentoC
 import { FavoritesCard } from "./components/FavoritesCard";
 import { QuadernoCineseCard, QuadernoCoreanoCard } from "./components/QuaderniScritturaCards";
 import { MobileIframe } from "./components/MobileIframe";
-import MiniPhoneCard from "./components/MiniPhoneCard";
+import { MiniPhoneCard } from "./components/MiniPhoneCard";
 import { TypewriterEditorCard } from "./components/TypewriterEditorCard";
 
 const DESK_EMOJIS = ['🀄', '🇯🇵', '🇨🇳', '🇰🇷', '🇷🇺', '🇬🇧', '📌', '📚', '🥋', '💭', '🎧', '🪆', '🎙️', '📺', '🎲'];
