@@ -98,3 +98,5 @@ export const MiniPhoneCard: React.FC = () => {
   );
 };
 
+export default MiniPhoneCard;
+
