@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { LayoutGrid, PlusSquare } from 'lucide-react';
+import { DiacriticsArchPad } from "./components/DiacriticsArchPad";
 
-const DESK_EMOJIS = ['☕', '📎', '✏️', '📐', '✂️', '💡', '📌', '📚', '⌨️', '🖱️', '🎧', '🧮', '🖇️', '🗑️', '🖋️'];
+const DESK_EMOJIS = ['🀄', '🇯🇵', '🇨🇳', '🇰🇷', '🇷🇺', '🇬🇧', '📌', '📚', '🥋', '💭', '🎧', '🪆', '🎙️', '📺', '🎲'];
 
 export default function App() {
   // =========================================
@@ -43,23 +44,16 @@ export default function App() {
 
       {/* 2. MENU DOCK SUPERIORE GLASSMORPHISM */}
       <nav className="top-dock">
-        <a href="https://androidmain.netlify.app/" target="_blank" rel="noopener noreferrer" className="dock-item android" data-tooltip="Ambiente Android">🤖</a>
+        <a href="https://lingua-cinese.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item cinese" data-tooltip="Lingua Cinese">🀄</a>
         <a href="https://scuola-virtuale.netlify.app/" target="_blank" rel="noopener noreferrer" className="dock-item school" data-tooltip="Scuola Virtuale">🎓</a>
         <a href="pdf-home.html" target="_blank" rel="noopener noreferrer" className="dock-item eserciziario" data-tooltip="Pdf Home">✍</a>
-        <a href="https://laboratorio-programmazione.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item windows" data-tooltip="Ambiente Windows">🪟</a>
-        <a href="https://mela-os.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item apple" data-tooltip="IPad Scriba">🍎</a>
+        <a href="https://linguacoreana.netlify.app/" target="_blank" rel="noopener noreferrer" className="dock-item coreano" data-tooltip="Lingua Coreana">🇰🇷</a>
+        <a href="https://chinese-os-cell.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item apple" data-tooltip="Cinese OS">📱</a>
         <a href="https://photo-finder-kohl.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item immagini" data-tooltip="Ricerca immagini">🖼</a>
-        <a href="https://ricettario-internazionale.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item ricettario" data-tooltip="Ricettario">🍳</a>
-        <a href="https://film-finder-indol.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item film" data-tooltip="Film">🎬</a>
         <a href="https://winamp-swart.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Musica" data-tooltip="Musica">🎧</a>
-        <a href="https://ide-core.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Coding" data-tooltip="Edu Code">💻</a>
-        <a href="https://tutor-programmazione.netlify.app/" target="_blank" rel="noopener noreferrer" className="dock-item Tutor" data-tooltip="Tutor">🖥</a>
         <a href="social.html" target="_blank" rel="noopener noreferrer" className="dock-item Social" data-tooltip="Social">👥</a>
         <a href="https://bunko-rho.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Editor" data-tooltip="Bunko">📝</a>
-        <a href="https://playground-web-ten.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Playground" data-tooltip="Playground">🖲</a>
-        <a href="https://code-editor-khaki-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Code-Editor" data-tooltip="Code-Editor">🖱</a>
         <a href="https://ufficio-virtuale.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Ufficio-Virtuale" data-tooltip="Ufficio-Virtuale">🧰</a>
-        <a href="https://web-coding-study-studio.ai.studio/" target="_blank" rel="noopener noreferrer" className="dock-item LearnCode" data-tooltip="LearnCode">📱</a>
         <a href="BlogCraft.html" target="_blank" rel="noopener noreferrer" className="dock-item BlogCraft" data-tooltip="BlogCraft">🌐</a>
       </nav>
 
@@ -86,10 +80,34 @@ export default function App() {
         <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6 [column-fill:balance] w-full">
           {/* SEGNAPOSTO 1 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1deg' } as any}>
-            <div className="w-full min-h-[420px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 01</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 1</p>
+            <div
+              className="ipod-embed-container"
+              style={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: '480px',
+                margin: '0 auto',
+                aspectRatio: '4 / 7.2',
+                borderRadius: '2rem',
+                boxShadow: '0 20px 50px rgba(0, 0, 0, 0.3)',
+                overflow: 'hidden',
+                backgroundColor: '#000',
+              }}
+            >
+              <iframe
+                src="https://i-pod-audio-player.vercel.app/"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                }}
+                allow="autoplay; clipboard-write; encrypted-media"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-downloads"
+                title="Retro iPod Player"
+              />
             </div>
           </div>
 
@@ -120,22 +138,18 @@ export default function App() {
             </div>
           </div>
 
-          {/* SEGNAPOSTO 5 */}
+          {/* SEGNAPOSTO 5 (in attesa del file src/components/StaticWhiteboard.jsx) */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1.5deg' } as any}>
             <div className="w-full min-h-[300px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
               <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
               <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 05</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 5</p>
+              <p className="text-sm text-slate-500 mt-1">Crea StaticWhiteboard.jsx per inserirla qui</p>
             </div>
           </div>
 
           {/* SEGNAPOSTO 6 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '-1deg' } as any}>
-            <div className="w-full min-h-[380px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 06</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 6</p>
-            </div>
+            <DiacriticsArchPad />
           </div>
 
           {/* SEGNAPOSTO 7 */}
