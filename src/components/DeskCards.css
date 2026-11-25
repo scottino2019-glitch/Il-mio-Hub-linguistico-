@@ -1,0 +1,171 @@
+/* =========================================
+   SMARTPHONE CARD STYLES
+   ========================================= */
+.smartphone-bezel {
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  border-radius: 40px;
+  border: 12px solid #F34E90;
+  background-color: #0b0c10;
+  position: relative;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.65), inset 0 2px 4px rgba(255, 255, 255, 0.15);
+}
+
+.top-ears {
+  height: 20px;
+  background-color: #1AEF72;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  border-radius: 0 0 14px 14px;
+  z-index: 20;
+}
+
+.notch-camera {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #0d0e12;
+  margin-right: 10px;
+}
+
+.ear-speaker {
+  width: 44px;
+  height: 3.5px;
+  border-radius: 2px;
+  background-color: #1a2228;
+}
+
+.smartphone-screen {
+  background-image: url("https://images.unsplash.com/photo-1677462679593-97b817fb118a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4MDc1Mjd8MHwxfHNlYXJjaHwyOXx8bGlicmklMjBhbnRpY2hpfGVufDB8fHx8MTc3OTc1MjI5NXww&ixlib=rb-4.1.0&q=85");
+  background-position: center;
+  background-size: cover;
+  border-radius: 28px;
+  overflow: hidden;
+  padding: 14px 14px 18px 14px;
+  position: relative;
+}
+
+.app-tile {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 12px 10px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.app-tile:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #0cebeb;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(12, 235, 235, 0.18), 0 0 8px rgba(12, 235, 235, 0.1);
+}
+
+/* =========================================
+   PINK SPIRAL NOTEBOOK STYLES
+   ========================================= */
+.pink-spiral-notebook {
+  background: #f472b6;
+  background-image: linear-gradient(
+    135deg,
+    #ec4899 15%,
+    #f472b6 15%,
+    #f472b6 50%,
+    #ec4899 50%,
+    #ec4899 65%,
+    #f472b6 65%,
+    #f472b6 100%
+  );
+  background-size: 30px 30px;
+  border: 4px solid #db2777;
+  border-radius: 12px 24px 24px 12px;
+  padding: 12px 14px 14px 28px;
+  box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.3);
+  position: relative;
+  min-height: 480px;
+}
+
+.spiral-rings-left {
+  position: absolute;
+  top: 24px;
+  left: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  z-index: 15;
+}
+
+.spiral-wire {
+  width: 14px;
+  height: 20px;
+  background: linear-gradient(90deg, #d1d5db 0%, #ffffff 50%, #9ca3af 100%);
+  border: 1.5px solid #4b5563;
+  border-radius: 4px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.pink-notebook-sheet {
+  background-color: #fdf2f8;
+  border-radius: 8px;
+  border: 1px solid #f9a8d4;
+  padding: 16px;
+  color: #1f2937;
+  position: relative;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05), 3px 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.bg-quadretti {
+  background-image:
+    linear-gradient(#fbcfe8 1px, transparent 1px),
+    linear-gradient(90deg, #fbcfe8 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.bg-righe {
+  background-image: linear-gradient(#fbcfe8 1px, transparent 1px);
+  background-size: 100% 20px;
+  line-height: 20px;
+}
+
+.notebook-sticker {
+  position: absolute;
+  bottom: -6px;
+  right: 12px;
+  background: #fbbf24;
+  color: #1e293b;
+  font-family: monospace;
+  font-weight: 900;
+  font-size: 9px;
+  padding: 4px 8px;
+  border-radius: 40% 10% 40% 10%;
+  border: 2px dashed #b45309;
+  transform: rotate(-6deg);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.notebook-sticker-heart {
+  position: absolute;
+  top: -8px;
+  right: 28px;
+  background: #ef4444;
+  color: white;
+  font-size: 12px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid #ffffff;
+  transform: rotate(12deg);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+}
