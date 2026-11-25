@@ -4,6 +4,12 @@ import { LayoutGrid, PlusSquare } from 'lucide-react';
 import { DiacriticsArchPad } from "./components/DiacriticsArchPad";
 import {StaticWhiteBoard } from "./components/StaticWhiteBoard";
 import { DiacriticsArchKor } from "./components/DiacriticsArchKor";
+import { RojiCard, SmartphoneCard, PinkPdfNotebookCard, AgendaKanjiCard,  BentoChronicleHeader } from "./components/DeskCards";
+import { FavoritesCard } from "./components/FavoritesCard";
+import { QuadernoCineseCard, QuadernoCoreanoCard } from "./components/QuaderniScritturaCards";
+import { MobileIframe } from "./components/MobileIframe";
+import { MiniPhoneCard } from ".components/MiniPhoneCard";
+import { TypewriterEditorCard } from "./components/TypewriterEditorCard";
 
 const DESK_EMOJIS = ['🀄', '🇯🇵', '🇨🇳', '🇰🇷', '🇷🇺', '🇬🇧', '📌', '📚', '🥋', '💭', '🎧', '🪆', '🎙️', '📺', '🎲'];
 
@@ -65,17 +71,10 @@ export default function App() {
         <div className="w-full flex justify-center mb-4">
           <div className="w-full max-w-[1000px] h-[150px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/25 backdrop-blur-sm flex flex-col items-center justify-center px-6">
             <LayoutGrid className="w-6 h-6 text-slate-400 mb-2" />
-            <span className="text-xs font-mono uppercase tracking-widest text-slate-400">
-              Segnaposto Header
-            </span>
-            <p className="text-sm text-slate-500 mt-1">
-              Inserisci qui il titolo o il banner della scrivania
-            </p>
+          <BentoChronicleHeader />
           </div>
         </div>
-        <p className="text-sm text-slate-400 mt-2">
-          Segnaposto sottotitolo
-        </p>
+      
       </header>
 
       {/* 4. MAIN FLUID MASONRY GRID CONTAINER */}
@@ -114,47 +113,39 @@ export default function App() {
             </div>
           </div>
 
+        
           {/* SEGNAPOSTO 2 */}
-          <div className="desk-card hover-rot-1" style={{ '--hover-rot': '-1deg' } as any}>
-            <div className="w-full min-h-[320px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 02</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 2</p>
-            </div>
+         <div className="desk-card hover-rot-1" style= {{ '--hover-rot': '0.5deg' } as any}>
+          <QuadernoCineseCard />
           </div>
 
           {/* SEGNAPOSTO 3 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '0.5deg' } as any}>
-            <div className="w-full min-h-[260px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 03</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 3</p>
-            </div>
+           <QuadernoCoreanoCard />
           </div>
 
           {/* SEGNAPOSTO 4 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '-1deg' } as any}>
-            <div className="w-full min-h-[460px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 04</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 4</p>
-            </div>
+          <MobileIframe />
+           
           </div>
 
           {/* SEGNAPOSTO 5 (in attesa del file src/components/StaticWhiteboard.jsx) */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1.5deg' } as any}>
-            <StaticWhiteBoard />
+            <DiacriticsArchPad />
             
           </div>
 
           {/* SEGNAPOSTO 6 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '-1deg' } as any}>
-            <DiacriticsArchPad />
+           <FavoritesCard />
+
           </div>
 
           {/* SEGNAPOSTO 7 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1deg' } as any}>
-            <div className="w-full min-h-[250px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+           
+            <div className="w-full min-h-[290px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
               <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
               <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 07</span>
               <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 7</p>
@@ -163,29 +154,19 @@ export default function App() {
 
           {/* SEGNAPOSTO 8 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '-1.5deg' } as any}>
-            <div className="w-full min-h-[440px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 08</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 8</p>
-            </div>
+           <SmartphoneCard />
           </div>
 
           {/* SEGNAPOSTO 9 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1deg' } as any}>
-            <div className="w-full min-h-[290px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 09</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 9</p>
-            </div>
+           <StaticWhiteBoard />
+
+           
           </div>
 
           {/* SEGNAPOSTO 10 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '-1deg' } as any}>
-            <div className="w-full min-h-[360px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 10</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 10</p>
-            </div>
+            <RojiCard />
           </div>
 
           {/* SEGNAPOSTO 11 */}
@@ -195,11 +176,7 @@ export default function App() {
 
           {/* SEGNAPOSTO 12 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '-1deg' } as any}>
-            <div className="w-full min-h-[270px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 12</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 12</p>
-            </div>
+          <MiniPhoneCard />
           </div>
 
           {/* SEGNAPOSTO 13 */}
@@ -213,29 +190,17 @@ export default function App() {
 
           {/* SEGNAPOSTO 14 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '-1deg' } as any}>
-            <div className="w-full min-h-[450px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 14</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 14</p>
-            </div>
+            <PinkPdfNotebookCard />
           </div>
 
           {/* SEGNAPOSTO 15 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1.5deg' } as any}>
-            <div className="w-full min-h-[280px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 15</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 15</p>
-            </div>
+           <AgendaKanjiCard />
           </div>
 
           {/* SEGNAPOSTO 16 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '-1deg' } as any}>
-            <div className="w-full min-h-[330px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 16</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 16</p>
-            </div>
+           <TypewriterEditorCard />
           </div>
         </div>
       </main>
