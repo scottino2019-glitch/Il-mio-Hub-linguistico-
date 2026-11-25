@@ -1,6 +1,164 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 
+export interface StaticBoardNote {
+  id: string;
+  text: string;
+  color: 'yellow' | 'sky' | 'rose' | 'mint';
+}
+
+export interface StaticWhiteboardProps {
+  initialNotes?: StaticBoardNote[];
+  defaultLocked?: boolean;
+  storageKey?: string;
+}
+
+const VALID_COLORS: StaticBoardNote['color'][] = ['yellow', 'sky', 'rose', 'mint'];
+
+const DEFAULT_NOTES: StaticBoardNote[] = [
+  { id: '1', text: 'Call cliente ore 11:00', color: 'yellow' },
+  { id: '2', text: 'Deploy build v1.4', color: 'sky' },
+  { id: '3', text: 'Rivedere copy home', color: 'rose' },
+  { id: '4', text: 'Test mobile Safari', color: 'mint' },
+];
+
+function sanitizeNotes(raw: unknown, fallback: StaticBoardNote[]): StaticBoardNote[] {
+  if (!Array.isArray(raw)) return fallback;
+  const cleaned: StaticBoardNote[] = [];
+  raw.forEach((item, idx) => {
+    if (!item || typeof item !== 'object') return;
+    const obj = item as Record<string, unknown>;
+    if (typeof obj.text !== 'string' || !obj.text.trim()) return;
+    const color = VALID_COLORS.includes(obj.color as StaticBoardNote['color'])
+      ? (obj.color as StaticBoardNote['color'])
+      : VALID_COLORS[idx % VALID_COLORS.length];
+    const id = typeof obj.id === 'string' && obj.id ? obj.id : `note-${idx}-${Date.now()}`;
+    cleaned.push({ id, text: obj.text, color });
+  });
+  return cleaned.length > 0 ? cleaned : fallback;
+}
+
+export function StaticWhiteboard({
+  initialNotes = DEFAULT_NOTES,
+  defaultLocked = true,
+  storageKey = 'officina_static_board_v1',
+}: StaticWhiteboardProps) {
+  useComponentStyles();
+  const [locked, setLocked] = useState(defaultLocked);
+  const [notes, setNotes] = useState<StaticBoardNote[]>(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        return sanitizeNotes(JSON.parse(saved), initialNotes);
+      }
+    } catch {}
+    return initialNotes;
+  });
+  const [draft, setDraft] = useState('');
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(notes));
+    } catch {}
+  }, [notes, storageKey]);
+
+  const addNote = (e: React.FormEvent) => {
+    e.preventDefault();
+    const text = draft.trim();
+    if (!text) return;
+    setNotes((p) => [
+      ...p.slice(-5),
+      { id: `n-${Date.now()}`, text, color: VALID_COLORS[p.length % VALID_COLORS.length] },
+    ]);
+    setDraft('');
+  };
+
+  const updateNote = (id: string, text: string) => {
+    setNotes((p) => p.map((n) => (n.id === id ? { ...n, text } : n)));
+  };
+
+  const removeNote = (id: string) => {
+    setNotes((p) => p.filter((x) => x.id !== id));
+  };
+
+  const resetNotes = () => {
+    setNotes(initialNotes);
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(initialNotes));
+    } catch {}
+  };
+
+  return (
+    <div className="off-sb-frame">
+      <div className="off-sb-cork">
+        <div className="off-sb-grid">
+          {notes.map((n, idx) => (
+            <div
+              key={n.id}
+              className={`off-sb-note is-${n.color} ${idx % 2 === 0 ? 'tilt-l' : 'tilt-r'}`}
+            >
+              <span className="off-sb-pin" />
+              {!locked && (
+                <button
+                  type="button"
+                  className="off-sb-del"
+                  aria-label="Rimuovi nota"
+                  onClick={() => removeNote(n.id)}
+                >
+                  ×
+                </button>
+              )}
+              {locked ? (
+                <p className="off-sb-text">{n.text}</p>
+              ) : (
+                <textarea
+                  rows={2}
+                  className="off-sb-textarea"
+                  value={n.text}
+                  onChange={(e) => updateNote(n.id, e.target.value)}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="off-sb-bar">
+          <span className="off-sb-badge">{locked ? 'Bacheca fissata · Salvata' : 'Modifica o aggiungi note'}</span>
+          <div className="off-sb-actions">
+            {!locked && (
+              <button type="button" className="off-sb-lock" onClick={resetNotes}>
+                Reset
+              </button>
+            )}
+            <button type="button" className="off-sb-lock" onClick={() => setLocked((v) => !v)}>
+              {locked ? 'Sblocca' : 'Blocca'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {!locked && (
+        <form className="off-sb-add" onSubmit={addNote}>
+          <input
+            type="text"
+            inputMode="text"
+            autoComplete="off"
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            placeholder="Attacca un post-it..."
+          />
+          <button type="submit">+</button>
+        </form>
+      )}
+    </div>
+  );
+}
+
+export const StaticWhiteBoard = StaticWhiteboard;
+export type StaticWhiteBoardProps = StaticWhiteboardProps;
+export default StaticWhiteboard;
+
+/* --- Stili CSS integrati nel componente --- */
 const STYLE_ID = 'officina-static-whiteboard-css';
 const COMPONENT_CSS = `
 .off-sb-frame {
@@ -187,158 +345,3 @@ function useComponentStyles() {
   }, []);
 }
 
-
-export interface StaticBoardNote {
-  id: string;
-  text: string;
-  color: 'yellow' | 'sky' | 'rose' | 'mint';
-}
-
-export interface StaticWhiteboardProps {
-  initialNotes?: StaticBoardNote[];
-  defaultLocked?: boolean;
-  storageKey?: string;
-}
-
-const VALID_COLORS: StaticBoardNote['color'][] = ['yellow', 'sky', 'rose', 'mint'];
-
-const DEFAULT_NOTES: StaticBoardNote[] = [
-  { id: '1', text: 'Call cliente ore 11:00', color: 'yellow' },
-  { id: '2', text: 'Deploy build v1.4', color: 'sky' },
-  { id: '3', text: 'Rivedere copy home', color: 'rose' },
-  { id: '4', text: 'Test mobile Safari', color: 'mint' },
-];
-
-function sanitizeNotes(raw: unknown, fallback: StaticBoardNote[]): StaticBoardNote[] {
-  if (!Array.isArray(raw)) return fallback;
-  const cleaned: StaticBoardNote[] = [];
-  raw.forEach((item, idx) => {
-    if (!item || typeof item !== 'object') return;
-    const obj = item as Record<string, unknown>;
-    if (typeof obj.text !== 'string' || !obj.text.trim()) return;
-    const color = VALID_COLORS.includes(obj.color as StaticBoardNote['color'])
-      ? (obj.color as StaticBoardNote['color'])
-      : VALID_COLORS[idx % VALID_COLORS.length];
-    const id = typeof obj.id === 'string' && obj.id ? obj.id : `note-${idx}-${Date.now()}`;
-    cleaned.push({ id, text: obj.text, color });
-  });
-  return cleaned.length > 0 ? cleaned : fallback;
-}
-
-export function StaticWhiteboard({
-  initialNotes = DEFAULT_NOTES,
-  defaultLocked = true,
-  storageKey = 'officina_static_board_v1',
-}: StaticWhiteboardProps) {
-  useComponentStyles();
-  const [locked, setLocked] = useState(defaultLocked);
-  const [notes, setNotes] = useState<StaticBoardNote[]>(() => {
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) {
-        return sanitizeNotes(JSON.parse(saved), initialNotes);
-      }
-    } catch {}
-    return initialNotes;
-  });
-  const [draft, setDraft] = useState('');
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(notes));
-    } catch {}
-  }, [notes, storageKey]);
-
-  const addNote = (e: React.FormEvent) => {
-    e.preventDefault();
-    const text = draft.trim();
-    if (!text) return;
-    setNotes((p) => [
-      ...p.slice(-5),
-      { id: `n-${Date.now()}`, text, color: VALID_COLORS[p.length % VALID_COLORS.length] },
-    ]);
-    setDraft('');
-  };
-
-  const updateNote = (id: string, text: string) => {
-    setNotes((p) => p.map((n) => (n.id === id ? { ...n, text } : n)));
-  };
-
-  const removeNote = (id: string) => {
-    setNotes((p) => p.filter((x) => x.id !== id));
-  };
-
-  const resetNotes = () => {
-    setNotes(initialNotes);
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(initialNotes));
-    } catch {}
-  };
-
-  return (
-    <div className="off-sb-frame">
-      <div className="off-sb-cork">
-        <div className="off-sb-grid">
-          {notes.map((n, idx) => (
-            <div
-              key={n.id}
-              className={`off-sb-note is-${n.color} ${idx % 2 === 0 ? 'tilt-l' : 'tilt-r'}`}
-            >
-              <span className="off-sb-pin" />
-              {!locked && (
-                <button
-                  type="button"
-                  className="off-sb-del"
-                  aria-label="Rimuovi nota"
-                  onClick={() => removeNote(n.id)}
-                >
-                  ×
-                </button>
-              )}
-              {locked ? (
-                <p className="off-sb-text">{n.text}</p>
-              ) : (
-                <textarea
-                  rows={2}
-                  className="off-sb-textarea"
-                  value={n.text}
-                  onChange={(e) => updateNote(n.id, e.target.value)}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="off-sb-bar">
-          <span className="off-sb-badge">{locked ? 'Bacheca fissata · Salvata' : 'Modifica o aggiungi note'}</span>
-          <div className="off-sb-actions">
-            {!locked && (
-              <button type="button" className="off-sb-lock" onClick={resetNotes}>
-                Reset
-              </button>
-            )}
-            <button type="button" className="off-sb-lock" onClick={() => setLocked((v) => !v)}>
-              {locked ? 'Sblocca' : 'Blocca'}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {!locked && (
-        <form className="off-sb-add" onSubmit={addNote}>
-          <input
-            type="text"
-            inputMode="text"
-            autoComplete="off"
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            placeholder="Attacca un post-it..."
-          />
-          <button type="submit">+</button>
-        </form>
-      )}
-    </div>
-  );
-}
-
-export default StaticWhiteboard;
