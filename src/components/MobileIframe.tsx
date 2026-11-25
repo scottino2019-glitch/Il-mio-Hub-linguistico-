@@ -33,8 +33,35 @@ const MOBILE_APP_HTML = `<!doctype html>
 
 function safeUrl(raw: string): string | null {
   try {
-    const u = new URL(raw.trim().startsWith('http') ? raw.trim() : `https://${raw.trim()}`);
+    const trimmed = raw.trim();
+    if (!trimmed) return null;
+    const u = new URL(trimmed.startsWith('http') ? trimmed : `https://${trimmed}`);
     return u.protocol === 'http:' || u.protocol === 'https:' ? u.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
+const BLOCKED_HOSTS = [
+  'google.',
+  'youtube.com',
+  'youtu.be',
+  'facebook.com',
+  'instagram.com',
+  'x.com',
+  'twitter.com',
+  'github.com',
+  'linkedin.com',
+  'amazon.',
+];
+
+function isKnownFrameBlocked(url: string): string | null {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, '').toLowerCase();
+    const hit = BLOCKED_HOSTS.find((pattern) =>
+      pattern.endsWith('.') ? host.startsWith(pattern) || host.includes(`.${pattern}`) : host === pattern || host.endsWith(`.${pattern}`)
+    );
+    return hit ? host : null;
   } catch {
     return null;
   }
@@ -50,14 +77,21 @@ export function MobileIframe({
   const [activeUrl, setActiveUrl] = useState(initialUrl);
   const [reloadKey, setReloadKey] = useState(0);
 
-  const handleLoad = (e: React.FormEvent) => {
-    e.preventDefault();
-    const valid = safeUrl(urlDraft);
+  const openUrl = (target: string) => {
+    const valid = safeUrl(target);
     if (!valid) return;
+    setUrlDraft(valid);
     setActiveUrl(valid);
     setMode('url');
     setReloadKey((k) => k + 1);
   };
+
+  const handleLoad = (e: React.FormEvent) => {
+    e.preventDefault();
+    openUrl(urlDraft);
+  };
+
+  const blockedHost = mode === 'url' ? isKnownFrameBlocked(activeUrl) : null;
 
   return (
     <div className="off-mob-wrap">
@@ -68,14 +102,32 @@ export function MobileIframe({
         <div className="off-mob-bezel">
           <div className="off-mob-island"><span /></div>
           <div className="off-mob-screen">
-            <iframe
-              key={`${mode}-${reloadKey}`}
-              title="Smartphone Iframe"
-              src={mode === 'url' ? activeUrl : undefined}
-              srcDoc={mode === 'sandbox' ? initialHtml : undefined}
-              sandbox="allow-scripts allow-forms allow-same-origin"
-              className="off-mob-iframe"
-            />
+            {blockedHost ? (
+              <div className="off-mob-blocked">
+                <strong>{blockedHost} blocca gli iframe</strong>
+                <p>Il sito invia X-Frame-Options e il browser non ne consente l&apos;apertura qui dentro.</p>
+                <a href={activeUrl} target="_blank" rel="noopener noreferrer" className="off-mob-open">
+                  Apri in nuova scheda
+                </a>
+                <button type="button" className="off-mob-fallback" onClick={() => openUrl('https://it.m.wikipedia.org/wiki/React')}>
+                  Prova Wikipedia
+                </button>
+              </div>
+            ) : (
+              <iframe
+                key={`${mode}-${reloadKey}`}
+                title="Smartphone Iframe"
+                src={mode === 'url' ? activeUrl : undefined}
+                srcDoc={mode === 'sandbox' ? initialHtml : undefined}
+                sandbox={
+                  mode === 'sandbox'
+                    ? 'allow-scripts allow-forms allow-same-origin'
+                    : 'allow-scripts allow-forms allow-same-origin allow-popups'
+                }
+                referrerPolicy="no-referrer"
+                className="off-mob-iframe"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -94,6 +146,7 @@ export function MobileIframe({
           onChange={(e) => setUrlDraft(e.target.value)}
           placeholder="https://..."
         />
+        <button type="submit" className="off-mob-go">Vai</button>
         <button type="button" className="off-mob-btn" onClick={() => setReloadKey((k) => k + 1)}>
           ↻
         </button>
@@ -108,7 +161,8 @@ export default MobileIframe;
 const STYLE_ID = 'officina-mobile-iframe-css';
 const COMPONENT_CSS = `
 .off-mob-wrap {
-  width: 288px;
+  width: 100%;
+  max-width: 330px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -119,12 +173,12 @@ const COMPONENT_CSS = `
 
 .off-mob-chassis {
   position: relative;
-  width: 272px;
-  height: 476px;
-  border-radius: 42px;
-  padding: 10px;
+  width: 316px;
+  height: 560px;
+  border-radius: 46px;
+  padding: 11px;
   background: linear-gradient(180deg, #334155 0%, #0f172a 55%, #020617 100%);
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  box-shadow: 0 22px 44px rgba(15, 23, 42, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.25);
   box-sizing: border-box;
 }
 
@@ -134,15 +188,15 @@ const COMPONENT_CSS = `
   background: #334155;
 }
 
-.off-mob-key-1 { left: -3px; top: 112px; height: 32px; border-radius: 2px 0 0 2px; }
-.off-mob-key-2 { left: -3px; top: 160px; height: 44px; border-radius: 2px 0 0 2px; }
-.off-mob-key-r { right: -3px; top: 128px; height: 56px; border-radius: 0 2px 2px 0; }
+.off-mob-key-1 { left: -3px; top: 128px; height: 36px; border-radius: 2px 0 0 2px; }
+.off-mob-key-2 { left: -3px; top: 176px; height: 48px; border-radius: 2px 0 0 2px; }
+.off-mob-key-r { right: -3px; top: 144px; height: 64px; border-radius: 0 2px 2px 0; }
 
 .off-mob-bezel {
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 33px;
+  border-radius: 36px;
   background: #000000;
   padding: 4px;
   overflow: hidden;
@@ -154,8 +208,8 @@ const COMPONENT_CSS = `
   top: 12px;
   left: 50%;
   transform: translateX(-50%);
-  width: 72px;
-  height: 18px;
+  width: 78px;
+  height: 19px;
   border-radius: 999px;
   background: #000000;
   z-index: 2;
@@ -175,18 +229,60 @@ const COMPONENT_CSS = `
 .off-mob-screen {
   width: 100%;
   height: 100%;
-  border-radius: 29px;
+  border-radius: 32px;
   overflow: hidden;
   background: #020617;
 }
 
 .off-mob-iframe {
   width: 340px;
-  height: 624px;
+  height: 630px;
   border: 0;
-  transform: scale(0.718);
+  transform: scale(0.841);
   transform-origin: top left;
   display: block;
+  background: #ffffff;
+}
+
+.off-mob-blocked {
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  color: #e2e8f0;
+  font-size: 12px;
+}
+
+.off-mob-blocked p {
+  margin: 0;
+  color: #94a3b8;
+  line-height: 1.45;
+}
+
+.off-mob-open {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.off-mob-fallback {
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #1e293b;
+  color: #e2e8f0;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .off-mob-bar {
@@ -206,20 +302,29 @@ const COMPONENT_CSS = `
   min-width: 0;
   border: 0;
   background: transparent;
-  font-size: 11px;
+  font-size: 12px;
   color: #334155;
   outline: none;
 }
 
-.off-mob-btn {
-  padding: 4px 8px;
+.off-mob-btn,
+.off-mob-go {
+  padding: 5px 8px;
   font-size: 11px;
   font-weight: 600;
   border: 0;
-  background: #f1f5f9;
-  color: #334155;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.off-mob-btn {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.off-mob-go {
+  background: #0f172a;
+  color: #ffffff;
 }
 `;
 
@@ -232,4 +337,3 @@ function useComponentStyles() {
     document.head.appendChild(style);
   }, []);
 }
-
