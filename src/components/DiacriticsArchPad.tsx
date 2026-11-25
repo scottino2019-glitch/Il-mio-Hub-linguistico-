@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './DiacriticsArchPad.css';
 
 const DEFAULT_SETS: Record<string, string[]> = {
-  Vocali: ['a', 'я', 'e', 'и', 'й', 'о', 'ю', 'ç', 'з', 'у', 'ё'],
+  Vocali: ['a', 'я', 'e', 'и', 'й', 'о', 'ю', 'з', 'у', 'ё'],
   Consonanti: ['ц', 'к', 'н', 'г', 'ш', 'щ', 'х', 'ф', 'в', 'п', 'р', 'л', 'ж', 'ч', 'с', 'м', 'и', 'т', 'б','д' ],
   Fonetici: ['ъ', 'ы', 'ь'],
 
