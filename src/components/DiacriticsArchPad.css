@@ -1,0 +1,102 @@
+/* === VASSOIO CIOTTOLI OCRA & ESPRESSO — CSS PURO MODULARE === */
+.gk-pebblepad {
+  --gk-pp-bg: #292524;
+  --gk-pp-surface: #44403c;
+  --gk-pp-accent: #f59e0b;
+  --gk-pp-key: #fffbeb;
+  --gk-pp-ink: #1c1917;
+
+  box-sizing: border-box;
+  width: min(310px, 100%);
+  padding: 20px;
+  background: var(--gk-pp-bg);
+  color: #fafaf9;
+  border-radius: 22px 44px 22px 44px;
+  box-shadow:
+    0 10px 0 -3px var(--gk-pp-accent),
+    0 24px 42px -16px rgba(28, 25, 23, 0.45);
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+.gk-pebblepad__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.gk-pebblepad__tab {
+  border: 0;
+  background: var(--gk-pp-surface);
+  color: #e7e5e4;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.gk-pebblepad__tab.is-active {
+  background: var(--gk-pp-accent);
+  color: var(--gk-pp-ink);
+}
+
+.gk-pebblepad__input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 0;
+  background: #1c1917;
+  color: #fef3c7;
+  padding: 10px 13px;
+  border-radius: 14px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  outline: none;
+}
+
+.gk-pebblepad__keys {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 7px;
+  margin-bottom: 12px;
+}
+
+.gk-pebblepad__key {
+  border: 0;
+  background: var(--gk-pp-key);
+  color: var(--gk-pp-ink);
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 8px 0;
+  border-radius: 16px 16px 20px 20px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #d97706;
+  transition: transform 0.1s ease;
+}
+
+.gk-pebblepad__key:active {
+  transform: translateY(2px);
+}
+
+.gk-pebblepad__foot {
+  display: flex;
+  gap: 8px;
+}
+
+.gk-pebblepad__btn {
+  flex: 1;
+  border: 0;
+  background: var(--gk-pp-accent);
+  color: var(--gk-pp-ink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.gk-pebblepad__btn--ghost {
+  background: var(--gk-pp-surface);
+  color: #fafaf9;
+}
