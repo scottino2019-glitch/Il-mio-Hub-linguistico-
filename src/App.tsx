@@ -11,6 +11,7 @@ import { MobileIframe } from "./components/MobileIframe";
 import { MiniPhoneCard } from "./components/MiniPhoneCard";
 import { TypewriterEditorCard } from "./components/TypewriterEditorCard";
 import { CinemaVideoCard } from "./components/CinemaVideoCard";
+import { GameBoy3000Card } from "./components/GameBoy3000Card";
 
 const DESK_EMOJIS = ['🀄', '🇯🇵', '🇨🇳', '🇰🇷', '🇷🇺', '🇬🇧', '📌', '📚', '🥋', '💭', '🎧', '🪆', '🎙️', '📺', '🎲'];
 
@@ -179,11 +180,7 @@ export default function App() {
 
           {/* SEGNAPOSTO 13 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1deg' } as any}>
-            <div className="w-full min-h-[340px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 13</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 13</p>
-            </div>
+            <TypewriterEditorCard />
           </div>
 
           {/* SEGNAPOSTO 14 */}
@@ -198,7 +195,8 @@ export default function App() {
 
           {/* SEGNAPOSTO 16 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '-1deg' } as any}>
-           <TypewriterEditorCard />
+<GameBoy3000Card />
+           
           </div>
         </div>
         <CinemaVideoCard />
