@@ -1,0 +1,121 @@
+/* =========================================
+   QUADERNO CINESE (Xuan Paper + 线装 Binding + 田字格/米字格)
+   ========================================= */
+.cn-notebook {
+  position: relative;
+  background-color: #f6eedc;
+  background-image:
+    radial-gradient(rgba(168, 120, 72, 0.08) 1px, transparent 0),
+    linear-gradient(180deg, rgba(255, 252, 245, 0.5) 0%, rgba(235, 222, 196, 0.45) 100%);
+  background-size: 14px 14px, 100% 100%;
+  border: 1.5px solid #8c2d19;
+  border-radius: 6px 14px 14px 6px;
+  box-shadow:
+    6px 6px 0 rgba(88, 24, 16, 0.35),
+    inset 0 0 24px rgba(168, 130, 84, 0.14);
+  color: #2b1810;
+  overflow: hidden;
+}
+
+/* Rilegatura tradizionale cinese a filo (线装) sul lato sinistro */
+.cn-binding-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 24px;
+  background: linear-gradient(90deg, #6e1c12 0%, #8f271a 82%, #59140c 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 18px 0;
+  z-index: 2;
+}
+
+.cn-stitch-hole {
+  position: relative;
+  width: 10px;
+  height: 18px;
+  border-top: 2px solid #f4dfb6;
+  border-bottom: 2px solid #f4dfb6;
+  border-right: 2px solid #f4dfb6;
+  border-radius: 0 3px 3px 0;
+  opacity: 0.9;
+}
+
+.cn-stitch-hole::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  width: 8px;
+  height: 2px;
+  background: #f4dfb6;
+  transform: translateY(-50%);
+}
+
+/* Griglia calligrafica Tianzige (田字格) / Mizige (米字格) */
+.cn-grid-box {
+  position: relative;
+  background-color: #fbf6ea;
+  border: 2px solid #c0392b;
+  box-shadow: inset 0 0 0 1px rgba(192, 57, 43, 0.12);
+}
+
+.cn-grid-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cn-seal-stamp {
+  border: 1.5px solid #b91c1c;
+  color: #b91c1c;
+  background: rgba(185, 28, 28, 0.06);
+  font-family: Georgia, "Noto Serif SC", serif;
+  line-height: 1.05;
+  transform: rotate(-4deg);
+}
+
+/* =========================================
+   QUADERNO COREANO (Hanji Paper + 원고지 Wongoji)
+   ========================================= */
+.kr-notebook {
+  position: relative;
+  background-color: #eef5ee;
+  background-image:
+    linear-gradient(rgba(45, 118, 92, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 118, 92, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border: 1.5px solid #1e5f4b;
+  border-radius: 14px;
+  box-shadow:
+    6px 6px 0 rgba(17, 65, 51, 0.32),
+    inset 0 0 22px rgba(45, 118, 92, 0.08);
+  color: #132a23;
+  overflow: hidden;
+}
+
+/* Fascia superiore stile quaderno coreano cucito a filo */
+.kr-top-binding {
+  background: linear-gradient(180deg, #1b5e4a 0%, #154d3c 100%);
+  color: #edf7f1;
+  border-bottom: 2px solid #0f3a2d;
+}
+
+/* Griglia Wongoji (원고지) per pratica Hangul */
+.kr-wongoji-box {
+  position: relative;
+  background-color: #f8fbf8;
+  border: 2px solid #267359;
+  box-shadow:
+    0 0 0 3px #f8fbf8,
+    0 0 0 4px rgba(38, 115, 89, 0.35);
+}
+
+.kr-link-cell {
+  border: 1px solid rgba(38, 115, 89, 0.45);
+  color: #1e5f4b;
+  background: rgba(255, 255, 255, 0.65);
+}
