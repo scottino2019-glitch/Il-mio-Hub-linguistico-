@@ -11,15 +11,17 @@ export interface PhoneAppLink {
 // 📱 MODIFICA QUI LE ICONE E I LINK DEL TELEFONO
 // =========================================
 const PHONE_APPS: PhoneAppLink[] = [
-  { label: "App 1", icon: "📚", url: "#", accentBg: "bg-amber-500/20 border-amber-400/30" },
-  { label: "App 2", icon: "✍️", url: "#", accentBg: "bg-rose-500/20 border-rose-400/30" },
-  { label: "App 3", icon: "🎧", url: "#", accentBg: "bg-sky-500/20 border-sky-400/30" },
-  { label: "App 4", icon: "🀄", url: "#", accentBg: "bg-emerald-500/20 border-emerald-400/30" },
-  { label: "App 5", icon: "🇰🇷", url: "#", accentBg: "bg-indigo-500/20 border-indigo-400/30" },
-  { label: "App 6", icon: "📝", url: "#", accentBg: "bg-fuchsia-500/20 border-fuchsia-400/30" },
-  { label: "App 7", icon: "🗂️", url: "#", accentBg: "bg-teal-500/20 border-teal-400/30" },
-  { label: "App 8", icon: "🔖", url: "#", accentBg: "bg-orange-500/20 border-orange-400/30" },
-  { label: "App 9", icon: "⭐", url: "#", accentBg: "bg-yellow-500/20 border-yellow-400/30" },
+  { label: "eserciziario", icon: "✍", url: "https://eserciziario-di-lingua-coreana.vercel.app/", accentBg: "bg-amber-500/20 border-amber-400/30" },
+  { label: "HanziCraft", icon: "㊗", url: "https://hanzicraft.com/dashboard", accentBg: "bg-rose-500/20 border-rose-400/30" },
+  { label: "Editor", icon: "📝", url: "https://editor-multiligua.netlify.app/", accentBg: "bg-sky-500/20 border-sky-400/30" },
+  { label: "Azbuka", icon: 🪆", url: "https://azbuka-viva-iota.vercel.app/", accentBg: "bg-emerald-500/20 border-emerald-400/30" },
+  { label: "Maestra", icon: "🇰🇷", url: "https://maestra-hangul.netlify.app/", accentBg: "bg-indigo-500/20 border-indigo-400/30" },
+  { label: "Vocal Tutor", icon: "🎧", url: "https://vocaltutor.vercel.app/", accentBg: "bg-fuchsia-500/20 border-fuchsia-400/30" },
+  { label: "AudioBook", icon: "🇷🇺", url: "https://russo-audiobook.netlify.app/", accentBg: "bg-teal-500/20 border-teal-400/30" },
+  { label: "Lettore Russo", icon: "🗣", url: "https://lettore-russo.vercel.app/", accentBg: "bg-orange-500/20 border-orange-400/30" },
+  { label: "PoliglottaPdf", icon: "🌍", url: "https://poliglotta-pdf.vercel.app/", accentBg: "bg-yellow-500/20 border-yellow-400/30" },
+   { label: "Quaderno", icon: "📑", url: "https://quaderni-e-lettore-pdf.vercel.app/", accentBg: "bg-yellow-500/20 border-yellow-400/30" },
+  
 ];
 
 export const MiniPhoneCard: React.FC = () => {
