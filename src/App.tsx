@@ -70,12 +70,11 @@ export default function App() {
 
       {/* 3. HEADER SEGNAPOSTO */}
       <header className="max-w-[1200px] mx-auto text-center mb-10 relative z-30">
-        <div className="w-full flex justify-center mb-4">
-          <div className="w-full max-w-[1000px] h-[150px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/25 backdrop-blur-sm flex flex-col items-center justify-center px-6">
+        
             <LayoutGrid className="w-6 h-6 text-slate-400 mb-2" />
           <BentoChronicleHeader />
-          </div>
-        </div>
+          
+        
       
       </header>
 
