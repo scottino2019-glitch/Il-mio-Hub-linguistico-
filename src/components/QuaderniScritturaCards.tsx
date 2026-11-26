@@ -13,24 +13,24 @@ export interface QuadernoLink {
 // =========================================
 const QUADERNI_CINESE: QuadernoLink[] = [
   {
-    title: "Hanzi Builder Pro",
-    subtitle: "Costruttore caratteri",
-    url: "hanziBuilderPro.html",
+    title: "Skitter",
+    subtitle: "Crea fogli di scrittura",
+    url: "https://hanzi-pro-build.netlify.app/",
   },
   {
-    title: "Quaderni per Esercizi",
-    subtitle: "Griglie di scrittura",
+    title: "HanziCraft",
+    subtitle: "Decomposizione Cinese",
     url: "https://quaderni-per-esercizi.vercel.app/",
   },
   {
-    title: "Quaderno Digitale",
+    title: "Studio Calligrafico",
     subtitle: "Pratica libera",
-    url: "https://quaderno-digitale.vercel.app/",
+    url: "https://studio-calligrafico.netlify.app/",
   },
   {
-    title: "Lingua Cinese",
-    subtitle: "Portale studio",
-    url: "https://lingua-cinese.vercel.app/",
+    title: "Hanzi Studio Pro",
+    subtitle: "Comporre frasi",
+    url: "https://hanzi-studio-pro.vercel.app//",
   },
   // { title: "Altro Quaderno", subtitle: "Descrizione", url: "https://..." },
 ];
@@ -40,19 +40,24 @@ const QUADERNI_CINESE: QuadernoLink[] = [
 // =========================================
 const QUADERNI_COREANO: QuadernoLink[] = [
   {
-    title: "Lingua Coreana",
-    subtitle: "Portale studio",
-    url: "https://linguacoreana.netlify.app/",
-  },
-  {
-    title: "Esercizi PDF Lingua",
-    subtitle: "Fogli esercizi",
-    url: "eserciziPDF.html",
-  },
-  {
-    title: "Quaderno Digitale",
+    title: "Write It!! (1)",
     subtitle: "Pratica Hangul",
-    url: "https://quaderno-digitale.vercel.app/",
+    url: "https://scrittura-coreana.vercel.app/",
+  },
+  {
+    title: "Write It!! (2)",
+    subtitle: "Fogli esercizi",
+    url: "https://generatore-di-fogli-di-scrittura-co.vercel.app/",
+  },
+  {
+    title: "Mirinae Korean",
+    subtitle: "Eserciziario",
+    url: "https://eserciziario-di-lingua-coreana.vercel.app/",
+  },
+    {
+    title: "Hangeul Studio",
+    subtitle: "Eserciziario",
+    url: "https://scrittura-coreana.vercel.app/",
   },
   // { title: "Quaderno Hangul", subtitle: "Descrizione", url: "https://..." },
 ];
