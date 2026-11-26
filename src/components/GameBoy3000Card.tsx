@@ -9,10 +9,10 @@ export interface ConsoleGameEntry {
 // 🎮 MODIFICA QUI I GIOCHI HTML IN /public/
 // =========================================
 const GAME_ROMS: ConsoleGameEntry[] = [
-  { title: "Snake Arcade Retro", file: "Snake Arcade Retro.html" },
-  { title: "Campo Minato", file: "campo-minato.html" },
-  { title: "Memory", file: "memory.html" },
-  { title: "Type Invader", file: "type-invader.html" },
+  { title: "Gioco15", file: "gioco-15.html" },
+  { title: "Gioco152", file: "gioco-15 (1).html" },
+  { title: "Memory", file: "memory-vocabolario-italiano-english.html" },
+
   // { title: "Nuovo Gioco", file: "nome-file.html" },
 ];
 
