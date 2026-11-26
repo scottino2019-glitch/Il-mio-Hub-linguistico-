@@ -65,7 +65,7 @@ export default function App() {
         <a href="https://chinese-os-cell.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item apple" data-tooltip="Cinese OS">📱</a>
         <a href="https://photo-finder-kohl.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item immagini" data-tooltip="Ricerca immagini">🖼</a>
         <a href="https://winamp-swart.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Musica" data-tooltip="Musica">🎧</a>
-        <a href="https://quaderni-di-scrittura.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Quaderni" data-tooltip="Quaderni">📝</a>
+        <a href="https://quaderni-di-scrittura.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Quaderni" data-tooltip="quaderni">📝</a>
          </nav>
 
       {/* 3. HEADER SEGNAPOSTO */}
