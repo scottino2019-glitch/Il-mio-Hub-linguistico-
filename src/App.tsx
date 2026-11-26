@@ -56,9 +56,11 @@ export default function App() {
       {/* 2. MENU DOCK SUPERIORE GLASSMORPHISM */}
       <nav className="top-dock">
         <a href="https://lingua-cinese.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item cinese" data-tooltip="Lingua Cinese">🀄</a>
+        <a href="https://english-hub-orcin-zeta.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Lingua Inglese" data-tooltip="Inglese">🇬🇧</a>
+        <a href="https://linguacoreana.netlify.app/" target="_blank" rel="noopener noreferrer" className="dock-item coreano" data-tooltip="Lingua Coreana">🇰🇷</a>
+        <a href="https://lingua-russa.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Lingua Russa" data-tooltip="Russo">🇷🇺</a>
         <a href="https://scuola-virtuale.netlify.app/" target="_blank" rel="noopener noreferrer" className="dock-item school" data-tooltip="Scuola Virtuale">🎓</a>
         <a href="pdf-home.html" target="_blank" rel="noopener noreferrer" className="dock-item eserciziario" data-tooltip="Pdf Home">✍</a>
-        <a href="https://linguacoreana.netlify.app/" target="_blank" rel="noopener noreferrer" className="dock-item coreano" data-tooltip="Lingua Coreana">🇰🇷</a>
         <a href="https://chinese-os-cell.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item apple" data-tooltip="Cinese OS">📱</a>
         <a href="https://photo-finder-kohl.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item immagini" data-tooltip="Ricerca immagini">🖼</a>
         <a href="https://winamp-swart.vercel.app/" target="_blank" rel="noopener noreferrer" className="dock-item Musica" data-tooltip="Musica">🎧</a>
