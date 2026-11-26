@@ -157,11 +157,8 @@ export default function App() {
 
           {/* SEGNAPOSTO 9 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1deg' } as any}>
-             <div className="w-full min-h-[340px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
-              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 09</span>
-              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 9</p>
-            </div>
+            <TypewriterEditorCard />
+            
            </div>
 
           {/* SEGNAPOSTO 10 */}
@@ -181,7 +178,11 @@ export default function App() {
 
           {/* SEGNAPOSTO 13 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1deg' } as any}>
-            <TypewriterEditorCard />
+             <div className="w-full min-h-[340px] rounded-2xl border-2 border-dashed border-slate-500/40 bg-slate-800/30 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+              <PlusSquare className="w-5 h-5 text-slate-400 mb-2" />
+              <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Segnaposto 13</span>
+              <p className="text-sm text-slate-500 mt-1">Posiziona qui la Card 13</p>
+            </div>
           </div>
 
           {/* SEGNAPOSTO 14 */}
