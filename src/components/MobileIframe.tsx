@@ -3,33 +3,7 @@ import React, { useState } from 'react';
 
 export interface MobileIframeProps {
   initialUrl?: string;
-  initialHtml?: string;
 }
-
-const MOBILE_APP_HTML = `<!doctype html>
-<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-  *{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-  body{margin:0;background:#0f172a;color:#f8fafc;padding:18px 16px}
-  .status{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:16px}
-  .hero{background:linear-gradient(135deg,#2563eb,#1d4ed8);border-radius:16px;padding:16px;margin-bottom:12px}
-  .hero h2{margin:0;font-size:17px}
-  .hero p{margin:4px 0 0;font-size:12px;color:#dbeafe}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-  .tile{background:#1e293b;border-radius:14px;padding:12px}
-  .tile small{display:block;font-size:10px;color:#94a3b8}
-  .tile strong{display:block;font-size:18px;margin-top:4px;font-variant-numeric:tabular-nums}
-  .btn{width:100%;border:0;background:#f8fafc;color:#0f172a;padding:11px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer}
-</style></head>
-<body>
-  <div class="status"><span>09:41</span><span>5G · 94%</span></div>
-  <div class="hero"><h2>Mobile Preview</h2><p>Viewport 375px isolato in iframe</p></div>
-  <div class="row">
-    <div class="tile"><small>Sessioni</small><strong id="s">1.420</strong></div>
-    <div class="tile"><small>Conversione</small><strong>4,8%</strong></div>
-  </div>
-  <button class="btn" onclick="const e=document.getElementById('s');e.textContent=(+e.textContent.replace('.','')+1).toLocaleString('it-IT')">Simula Azione</button>
-</body></html>`;
 
 function safeUrl(raw: string): string | null {
   try {
@@ -42,37 +16,10 @@ function safeUrl(raw: string): string | null {
   }
 }
 
-const BLOCKED_HOSTS = [
-  'google.',
-  'youtube.com',
-  'youtu.be',
-  'facebook.com',
-  'instagram.com',
-  'x.com',
-  'twitter.com',
-  'github.com',
-  'linkedin.com',
-  'amazon.',
-];
-
-function isKnownFrameBlocked(url: string): string | null {
-  try {
-    const host = new URL(url).hostname.replace(/^www\./, '').toLowerCase();
-    const hit = BLOCKED_HOSTS.find((pattern) =>
-      pattern.endsWith('.') ? host.startsWith(pattern) || host.includes(`.${pattern}`) : host === pattern || host.endsWith(`.${pattern}`)
-    );
-    return hit ? host : null;
-  } catch {
-    return null;
-  }
-}
-
 export function MobileIframe({
-  initialUrl = 'https://it.m.wikipedia.org/wiki/React',
-  initialHtml = MOBILE_APP_HTML,
+  initialUrl = 'https://lingua-planner.netlify.app/',
 }: MobileIframeProps) {
   useComponentStyles();
-  const [mode, setMode] = useState<'sandbox' | 'url'>('sandbox');
   const [urlDraft, setUrlDraft] = useState(initialUrl);
   const [activeUrl, setActiveUrl] = useState(initialUrl);
   const [reloadKey, setReloadKey] = useState(0);
@@ -82,7 +29,6 @@ export function MobileIframe({
     if (!valid) return;
     setUrlDraft(valid);
     setActiveUrl(valid);
-    setMode('url');
     setReloadKey((k) => k + 1);
   };
 
@@ -90,8 +36,6 @@ export function MobileIframe({
     e.preventDefault();
     openUrl(urlDraft);
   };
-
-  const blockedHost = mode === 'url' ? isKnownFrameBlocked(activeUrl) : null;
 
   return (
     <div className="off-mob-wrap">
@@ -102,32 +46,14 @@ export function MobileIframe({
         <div className="off-mob-bezel">
           <div className="off-mob-island"><span /></div>
           <div className="off-mob-screen">
-            {blockedHost ? (
-              <div className="off-mob-blocked">
-                <strong>{blockedHost} blocca gli iframe</strong>
-                <p>Il sito invia X-Frame-Options e il browser non ne consente l&apos;apertura qui dentro.</p>
-                <a href={activeUrl} target="_blank" rel="noopener noreferrer" className="off-mob-open">
-                  Apri in nuova scheda
-                </a>
-                <button type="button" className="off-mob-fallback" onClick={() => openUrl('https://it.m.wikipedia.org/wiki/React')}>
-                  Prova Wikipedia
-                </button>
-              </div>
-            ) : (
-              <iframe
-                key={`${mode}-${reloadKey}`}
-                title="Smartphone Iframe"
-                src={mode === 'url' ? activeUrl : undefined}
-                srcDoc={mode === 'sandbox' ? initialHtml : undefined}
-                sandbox={
-                  mode === 'sandbox'
-                    ? 'allow-scripts allow-forms allow-same-origin'
-                    : 'allow-scripts allow-forms allow-same-origin allow-popups'
-                }
-                referrerPolicy="no-referrer"
-                className="off-mob-iframe"
-              />
-            )}
+            <iframe
+              key={`${activeUrl}-${reloadKey}`}
+              title="Smartphone Iframe"
+              src={activeUrl}
+              allow="autoplay; clipboard-write; encrypted-media"
+              sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-downloads"
+              className="off-mob-iframe"
+            />
           </div>
         </div>
       </div>
@@ -136,9 +62,10 @@ export function MobileIframe({
         <button
           type="button"
           className="off-mob-btn"
-          onClick={() => setMode((m) => (m === 'sandbox' ? 'url' : 'sandbox'))}
+          title="Torna alla pagina iniziale"
+          onClick={() => openUrl(initialUrl)}
         >
-          {mode === 'sandbox' ? 'HTML' : 'URL'}
+          ⌂
         </button>
         <input
           type="text"
@@ -147,7 +74,12 @@ export function MobileIframe({
           placeholder="https://..."
         />
         <button type="submit" className="off-mob-go">Vai</button>
-        <button type="button" className="off-mob-btn" onClick={() => setReloadKey((k) => k + 1)}>
+        <button
+          type="button"
+          className="off-mob-btn"
+          title="Ricarica"
+          onClick={() => setReloadKey((k) => k + 1)}
+        >
           ↻
         </button>
       </form>
@@ -242,47 +174,6 @@ const COMPONENT_CSS = `
   transform-origin: top left;
   display: block;
   background: #ffffff;
-}
-
-.off-mob-blocked {
-  width: 100%;
-  height: 100%;
-  padding: 24px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 10px;
-  color: #e2e8f0;
-  font-size: 12px;
-}
-
-.off-mob-blocked p {
-  margin: 0;
-  color: #94a3b8;
-  line-height: 1.45;
-}
-
-.off-mob-open {
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: 10px;
-  background: #2563eb;
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.off-mob-fallback {
-  padding: 7px 12px;
-  border: 0;
-  border-radius: 10px;
-  background: #1e293b;
-  color: #e2e8f0;
-  font-weight: 500;
-  cursor: pointer;
 }
 
 .off-mob-bar {
