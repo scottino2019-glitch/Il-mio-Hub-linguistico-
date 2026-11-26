@@ -15,16 +15,12 @@ export interface FavoritesCardProps {
   storageKey?: string;
 }
 
-const DEFAULT_TILES: FavoriteTile[] = [
-  { id: '1', label: 'Inklingo', url: 'https://www.inklingo.app/it/chinese', short: 'Ink', color: '#0ea5e9', pinned: true },
-  { id: '2', label: 'MDN', url: 'https://developer.mozilla.org', short: 'MD', color: '#4f46e5', pinned: false },
-  { id: '3', label: 'GitHub', url: 'https://github.com', short: 'GH', color: '#334155', pinned: false },
-  { id: '4', label: 'Figma', url: 'https://figma.com', short: 'Fg', color: '#f43f5e', pinned: false },
-  { id: '5', label: 'Vite', url: 'https://vite.dev', short: 'Vt', color: '#f59e0b', pinned: false },
-];
+const DEFAULT_TILES: FavoriteTile[] = [];
 
-function sanitizeTiles(raw: unknown, fallback: FavoriteTile[]): FavoriteTile[] {
-  if (!Array.isArray(raw)) return fallback;
+const TILE_COLORS = ['#0ea5e9', '#2563eb', '#4f46e5', '#10b981', '#f59e0b', '#f43f5e'];
+
+function sanitizeTiles(raw: unknown): FavoriteTile[] | null {
+  if (!Array.isArray(raw)) return null;
   const cleaned: FavoriteTile[] = [];
   raw.forEach((item, idx) => {
     if (!item || typeof item !== 'object') return;
@@ -34,23 +30,29 @@ function sanitizeTiles(raw: unknown, fallback: FavoriteTile[]): FavoriteTile[] {
       id: typeof obj.id === 'string' && obj.id ? obj.id : `fav-${idx}-${Date.now()}`,
       label: obj.label,
       url: obj.url,
-      short: typeof obj.short === 'string' && obj.short ? obj.short : obj.label.slice(0, 2).toUpperCase(),
+      short:
+        typeof obj.short === 'string' && obj.short
+          ? obj.short
+          : obj.label.slice(0, 2).toUpperCase(),
       color: typeof obj.color === 'string' && obj.color ? obj.color : '#2563eb',
       pinned: Boolean(obj.pinned),
     });
   });
-  return cleaned.length > 0 ? cleaned : fallback;
+  return cleaned;
 }
 
 export function FavoritesCard({
   initialTiles = DEFAULT_TILES,
-  storageKey = 'officina_favorites_v1',
+  storageKey = 'officina_favorites_v2',
 }: FavoritesCardProps) {
   useComponentStyles();
   const [tiles, setTiles] = useState<FavoriteTile[]>(() => {
     try {
       const saved = localStorage.getItem(storageKey);
-      if (saved) return sanitizeTiles(JSON.parse(saved), initialTiles);
+      if (saved) {
+        const parsed = sanitizeTiles(JSON.parse(saved));
+        if (parsed !== null) return parsed;
+      }
     } catch {}
     return initialTiles;
   });
@@ -73,6 +75,7 @@ export function FavoritesCard({
     try {
       const parsed = new URL(raw);
       if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return;
+      const color = TILE_COLORS[tiles.length % TILE_COLORS.length];
       setTiles((p) => [
         ...p,
         {
@@ -80,7 +83,7 @@ export function FavoritesCard({
           label: label.trim(),
           url: parsed.toString(),
           short: label.trim().slice(0, 2).toUpperCase(),
-          color: '#2563eb',
+          color,
           pinned: false,
         },
       ]);
@@ -88,6 +91,10 @@ export function FavoritesCard({
       setUrl('');
       setAdding(false);
     } catch {}
+  };
+
+  const removeTile = (id: string) => {
+    setTiles((p) => p.filter((x) => x.id !== id));
   };
 
   return (
@@ -99,11 +106,23 @@ export function FavoritesCard({
 
       {adding ? (
         <form className="off-fav-form" onSubmit={add}>
-          <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Nome sito" />
-          <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." />
+          <input
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            placeholder="Nome sito"
+          />
+          <input
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="https://..."
+          />
           <div className="off-fav-fbtns">
-            <button type="button" onClick={() => setAdding(false)}>Annulla</button>
-            <button type="submit" className="is-primary">Salva</button>
+            <button type="button" onClick={() => setAdding(false)}>
+              Annulla
+            </button>
+            <button type="submit" className="is-primary">
+              Salva
+            </button>
           </div>
         </form>
       ) : (
@@ -112,18 +131,39 @@ export function FavoritesCard({
             <div key={t.id} className="off-fav-tile">
               <button
                 type="button"
+                className="off-fav-remove"
+                aria-label={`Rimuovi ${t.label}`}
+                title="Rimuovi"
+                onClick={() => removeTile(t.id)}
+              >
+                ×
+              </button>
+              <button
+                type="button"
                 className={`off-fav-pin ${t.pinned ? 'is-on' : ''}`}
-                onClick={() => setTiles((p) => p.map((x) => (x.id === t.id ? { ...x, pinned: !x.pinned } : x)))}
+                aria-label={`Fissa ${t.label}`}
+                title="Fissa in alto"
+                onClick={() =>
+                  setTiles((p) =>
+                    p.map((x) => (x.id === t.id ? { ...x, pinned: !x.pinned } : x))
+                  )
+                }
               >
                 ★
               </button>
               <a href={t.url} target="_blank" rel="noopener noreferrer">
-                <span className="off-fav-icon" style={{ backgroundColor: t.color }}>{t.short}</span>
+                <span className="off-fav-icon" style={{ backgroundColor: t.color }}>
+                  {t.short}
+                </span>
                 <span className="off-fav-name">{t.label}</span>
               </a>
             </div>
           ))}
-          <button type="button" className="off-fav-add" onClick={() => setAdding(true)}>
+          <button
+            type="button"
+            className="off-fav-add"
+            onClick={() => setAdding(true)}
+          >
             <span className="off-fav-plus">+</span>
             <span>Aggiungi</span>
           </button>
@@ -182,7 +222,7 @@ const COMPONENT_CSS = `
   background: rgba(30, 41, 59, 0.75);
   border: 1px solid rgba(51, 65, 85, 0.7);
   border-radius: 12px;
-  padding: 10px 6px;
+  padding: 12px 6px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -249,6 +289,25 @@ const COMPONENT_CSS = `
   color: #fbbf24;
 }
 
+.off-fav-remove {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1;
+  color: #64748b;
+  cursor: pointer;
+  opacity: 0.75;
+}
+
+.off-fav-remove:hover {
+  color: #fb7185;
+  opacity: 1;
+}
+
 .off-fav-form {
   display: flex;
   flex-direction: column;
@@ -295,4 +354,3 @@ function useComponentStyles() {
     document.head.appendChild(style);
   }, []);
 }
-
