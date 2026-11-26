@@ -16,7 +16,7 @@ export interface FavoritesCardProps {
 }
 
 const DEFAULT_TILES: FavoriteTile[] = [
-  { id: '1', label: 'React', url: 'https://react.dev', short: 'Re', color: '#0ea5e9', pinned: true },
+  { id: '1', label: 'Inklingo', url: 'https://www.inklingo.app/it/chinese/stories', short: 'Ink', color: '#0ea5e9', pinned: true },
   { id: '2', label: 'MDN', url: 'https://developer.mozilla.org', short: 'MD', color: '#4f46e5', pinned: false },
   { id: '3', label: 'GitHub', url: 'https://github.com', short: 'GH', color: '#334155', pinned: false },
   { id: '4', label: 'Figma', url: 'https://figma.com', short: 'Fg', color: '#f43f5e', pinned: false },
