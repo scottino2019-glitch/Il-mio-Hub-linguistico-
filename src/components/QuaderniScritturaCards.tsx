@@ -59,7 +59,12 @@ const QUADERNI_COREANO: QuadernoLink[] = [
     subtitle: "Eserciziario",
     url: "https://scrittura-coreana.vercel.app/",
   },
-  // { title: "Quaderno Hangul", subtitle: "Descrizione", url: "https://..." },
+ {
+    title: "Wongoji Studio",
+    subtitle: "Fogli",
+    url: "https://wongoji-creator.netlify.app/",
+  },
+ // { title: "Quaderno Hangul", subtitle: "Descrizione", url: "https://..." },
 ];
 
 interface PracticeGlyph {
