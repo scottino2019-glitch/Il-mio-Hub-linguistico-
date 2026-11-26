@@ -75,7 +75,7 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
               className="text-center font-bold text-white tracking-wider text-base mt-2 mb-6"
               style={{ textShadow: "0 2px 4px rgba(0,0,0,0.5)" }}
             >
-              📚 Libri &amp; Codex
+              📚 Librerie e Editor
             </div>
 
             {/* Icon apps grid list */}
@@ -105,14 +105,14 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
               </a>
 
               <a
-                href="https://biblioteca-six-plum.vercel.app/"
+                href="https://shelfread-pdf.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => triggerSound(880, "sine", 0.05)}
                 className="app-tile flex flex-col items-center justify-center p-3.5 rounded-2xl transition-all"
               >
                 <span className="text-3xl mb-1.5">📕</span>
-                <span className="text-[11px] text-white font-bold tracking-tight">Biblioteca</span>
+                <span className="text-[11px] text-white font-bold tracking-tight">Shelfread</span>
                 <span className="text-[7.5px] text-rose-400 font-mono mt-1 opacity-85">LINK DIRETTO ↗</span>
               </a>
 
@@ -128,29 +128,30 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
                 <span className="text-[7.5px] text-teal-400 font-mono mt-1 opacity-85">LINK DIRETTO ↗</span>
               </a>
 
-              <a
-                href="Laboratorio-programmazione.html"
+            <a
+                href="https://asiantext-designer.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => triggerSound(880, "sine", 0.05)}
                 className="app-tile flex flex-col items-center justify-center p-3.5 rounded-2xl transition-all"
               >
-                <span className="text-3xl mb-1.5">⚛️</span>
-                <span className="text-[11px] text-white font-bold tracking-tight">ReactLab</span>
+                <span className="text-3xl mb-1.5">✍</span>
+                <span className="text-[11px] text-white font-bold tracking-tight">AsianText</span>
                 <span className="text-[7.5px] text-teal-400 font-mono mt-1 opacity-85">LINK DIRETTO ↗</span>
               </a>
 
-              <a
-                href="https://lettore-pdf.vercel.app/"
+                <a
+                href= "https://scriba-multilinga.netlify.a"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => triggerSound(880, "sine", 0.05)}
                 className="app-tile flex flex-col items-center justify-center p-3.5 rounded-2xl transition-all"
               >
-                <span className="text-3xl mb-1.5">📔</span>
-                <span className="text-[11px] text-white font-bold tracking-tight">Lettore Pdf</span>
+                <span className="text-3xl mb-1.5">✍</span>
+                <span className="text-[11px] text-white font-bold tracking-tight">Scriba</span>
                 <span className="text-[7.5px] text-teal-400 font-mono mt-1 opacity-85">LINK DIRETTO ↗</span>
               </a>
+
             </div>
           </div>
 
@@ -586,12 +587,12 @@ export const PinkPdfNotebookCard: React.FC<DeskCardSoundProps> = ({ playSoundBli
               ➜ 🗒 Pdf Editor (Righe)
             </a>
             <a
-              href="pdf-creator.html"
+              href="https://hanja-hangul-studio.netlify.app/"
               target="_blank"
               rel="noopener noreferrer"
               className="block hover:underline hover:text-pink-600"
             >
-              ➜ 💼 Pdf Creator
+              ➜ ㊗ Hanja/Hangul
             </a>
           </div>
         </div>
