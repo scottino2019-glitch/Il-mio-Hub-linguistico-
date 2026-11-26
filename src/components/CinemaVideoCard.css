@@ -1,0 +1,31 @@
+.cinema-card-slot {
+  display: block;
+  width: 100%;
+  column-span: all;
+  -webkit-column-span: all;
+  margin: 1.5rem 0;
+  container-type: inline-size;
+}
+
+.cinema-card-shell {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.cinema-card-sidebar {
+  border-top: 1px solid #27272a;
+}
+
+@container (min-width: 640px) {
+  .cinema-card-shell {
+    grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  }
+
+  .cinema-card-sidebar {
+    border-top: 0;
+    border-left: 1px solid #27272a;
+  }
+}

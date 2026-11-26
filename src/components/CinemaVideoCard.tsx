@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Film, Link2, Plus, SkipBack, SkipForward, Trash2, Volume2, VolumeX } from "lucide-react";
+import "./CinemaVideoCard.css";
 
 export interface VideoLinkItem {
   id: string;
@@ -210,12 +211,11 @@ export const CinemaVideoCard: React.FC = () => {
   const progressPct = duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0;
 
   return (
-    /* block + [column-span:all] permette alla card di svilupparsi in LARGHEZZA anche dentro il layout a colonne */
-    <div className="block w-full [column-span:all] my-6">
-      <div className="w-full max-w-5xl mx-auto rounded-2xl bg-zinc-950 text-white border border-zinc-800 shadow-2xl overflow-hidden ring-1 ring-white/10 grid grid-cols-1 lg:grid-cols-12">
+    <div className="cinema-card-slot">
+      <div className="cinema-card-shell rounded-2xl bg-zinc-950 text-white border border-zinc-800 shadow-2xl overflow-hidden ring-1 ring-white/10">
         {/* COLONNA SINISTRA: Viewport 16:9 Cinema + Console Bar */}
-        <div className="lg:col-span-8 flex flex-col min-w-0">
-          <div className="relative aspect-video bg-black overflow-hidden group select-none flex flex-col justify-between p-4 sm:p-5">
+        <div className="flex flex-col min-w-0">
+          <div className="relative aspect-video w-full bg-black overflow-hidden group select-none flex flex-col justify-between p-4 sm:p-5">
             {currentVideo && parsedSource ? (
               parsedSource.kind === "youtube" || parsedSource.kind === "vimeo" ? (
                 <iframe
@@ -316,7 +316,7 @@ export const CinemaVideoCard: React.FC = () => {
                     <p className="text-xs text-zinc-300 font-mono mt-0.5">
                       {currentVideo
                         ? `Video ${safeIndex + 1} di ${videos.length}`
-                        : "Incolla un link video a destra"}
+                        : "Incolla un link video accanto"}
                     </p>
                   </>
                 )}
@@ -438,7 +438,7 @@ export const CinemaVideoCard: React.FC = () => {
         </div>
 
         {/* COLONNA DESTRA: Carica Video (solo link) + Playlist stile iPod */}
-        <div className="lg:col-span-4 bg-zinc-900/60 border-t lg:border-t-0 lg:border-l border-zinc-800 p-4 flex flex-col justify-between gap-3 min-w-0">
+        <div className="cinema-card-sidebar bg-zinc-900/60 p-4 flex flex-col justify-between gap-3 min-w-0">
           <form onSubmit={handleAddVideo} className="space-y-2">
             <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-amber-400 font-bold">
               <span className="flex items-center gap-1.5">
@@ -482,7 +482,7 @@ export const CinemaVideoCard: React.FC = () => {
           </form>
 
           {/* Lista tracce video */}
-          <div className="flex-1 min-h-[150px] max-h-[260px] overflow-y-auto space-y-1.5 pr-1">
+          <div className="flex-1 min-h-[140px] max-h-[260px] overflow-y-auto space-y-1.5 pr-1">
             {videos.length === 0 ? (
               <div className="text-center py-6 text-xs font-mono text-zinc-500 border border-dashed border-zinc-800 rounded-xl">
                 Nessun video salvato.

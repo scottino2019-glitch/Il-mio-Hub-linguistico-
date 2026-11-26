@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { jsPDF } from "jspdf";
 import "./DeskCards.css";
 
@@ -163,11 +163,133 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
 };
 
 // 3. PINK SPIRAL NOTEBOOK (Quadretti / Righe + PDF Creator)
+type NotebookLang = "it" | "ko" | "ru" | "zh-CN";
+
+const NOTEBOOK_LANG_OPTIONS: {
+  code: NotebookLang;
+  label: string;
+  chars: string[];
+  placeholderTitle: string;
+  placeholderBody: string;
+}[] = [
+  {
+    code: "it",
+    label: "IT",
+    chars: [],
+    placeholderTitle: "La Mia Nota",
+    placeholderBody: "Scrivi qui le tue formule, appunti o pensieri da stampare...",
+  },
+  {
+    code: "ko",
+    label: "한국어",
+    chars: ["ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "ㅇ", "ㅈ", "ㅎ", "ㅏ", "ㅓ", "ㅗ", "ㅜ", "ㅡ", "ㅣ"],
+    placeholderTitle: "한국어 노트",
+    placeholderBody: "여기에 한국어 문장이나 단어를 입력하세요...",
+  },
+  {
+    code: "ru",
+    label: "Русский",
+    chars: ["а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я"],
+    placeholderTitle: "Мои заметки",
+    placeholderBody: "Пишите здесь заметки на русском языке...",
+  },
+  {
+    code: "zh-CN",
+    label: "中文",
+    chars: ["一", "二", "三", "人", "口", "日", "月", "木", "水", "火", "山", "田", "心", "爱", "学", "书"],
+    placeholderTitle: "我的中文笔记",
+    placeholderBody: "在这里输入汉字、词语或例句...",
+  },
+];
+
+const MULTILINGUAL_FONT_STACK =
+  '"Noto Sans SC", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo", "Microsoft YaHei", "Malgun Gothic", "Noto Sans", "Segoe UI", system-ui, sans-serif';
+
+function wrapCanvasText(
+  ctx: CanvasRenderingContext2D,
+  rawText: string,
+  maxWidth: number
+): string[] {
+  const result: string[] = [];
+  const paragraphs = rawText.split(/\r?\n/);
+
+  for (const para of paragraphs) {
+    if (!para) {
+      result.push("");
+      continue;
+    }
+
+    let currentLine = "";
+    // Suddividi preservando spazi/parole per lingue latine/russo e carattere per carattere per CJK lunghi
+    const tokens = para.split(/(\s+)/);
+
+    for (const token of tokens) {
+      if (!token) continue;
+      const testLine = currentLine + token;
+
+      if (ctx.measureText(testLine).width <= maxWidth) {
+        currentLine = testLine;
+      } else if (ctx.measureText(token).width > maxWidth) {
+        // Token lungo (es. frase cinese/coreana senza spazi): spezza per singolo carattere
+        for (const ch of Array.from(token)) {
+          if (ctx.measureText(currentLine + ch).width <= maxWidth) {
+            currentLine += ch;
+          } else {
+            if (currentLine) result.push(currentLine);
+            currentLine = ch;
+          }
+        }
+      } else {
+        if (currentLine.trimEnd()) result.push(currentLine.trimEnd());
+        currentLine = token.trimStart();
+      }
+    }
+
+    if (currentLine) {
+      result.push(currentLine);
+    }
+  }
+
+  return result;
+}
+
 export const PinkPdfNotebookCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) => {
   const triggerSound = playSoundBlip ?? fallbackPlaySoundBlip;
   const [style, setStyle] = useState<"quadretti" | "righe">("quadretti");
+  const [lang, setLang] = useState<NotebookLang>("it");
   const [title, setTitle] = useState("La Mia Nota");
   const [content, setContent] = useState("Scrivi qui le tue formule, appunti o pensieri da stampare...");
+  const [activeField, setActiveField] = useState<"title" | "content">("content");
+
+  const titleInputRef = useRef<HTMLInputElement | null>(null);
+  const contentInputRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const currentLangConfig =
+    NOTEBOOK_LANG_OPTIONS.find((item) => item.code === lang) ?? NOTEBOOK_LANG_OPTIONS[0];
+
+  const handleInsertChar = (ch: string) => {
+    triggerSound(920, "sine", 0.03);
+    const isTitle = activeField === "title";
+    const el = isTitle ? titleInputRef.current : contentInputRef.current;
+    const value = isTitle ? title : content;
+    const setter = isTitle ? setTitle : setContent;
+
+    if (!el) {
+      setter(value + ch);
+      return;
+    }
+
+    const start = el.selectionStart ?? value.length;
+    const end = el.selectionEnd ?? value.length;
+    const next = value.slice(0, start) + ch + value.slice(end);
+    setter(next);
+
+    requestAnimationFrame(() => {
+      el.focus();
+      const pos = start + ch.length;
+      el.setSelectionRange(pos, pos);
+    });
+  };
 
   const handleCreatePdf = () => {
     triggerSound(1000, "sine", 0.12);
@@ -178,64 +300,119 @@ export const PinkPdfNotebookCard: React.FC<DeskCardSoundProps> = ({ playSoundBli
         format: "a4",
       });
 
-      // 1. Fill pinkish light background tint (#fdf2f8)
-      doc.setFillColor(253, 242, 248);
-      doc.rect(0, 0, 210, 297, "F");
+      // Rendering A4 ad alta risoluzione su Canvas per supportare perfettamente Coreano, Russo, Cinese e Italiano
+      const pageW = 1654; // 210mm @ 200 DPI
+      const pageH = 2339; // 297mm @ 200 DPI
+      const mm = (val: number) => (val / 210) * pageW;
 
-      // 2. Draw styled Grid margins or Lined tracks
-      doc.setDrawColor(249, 168, 212);
-      doc.setLineWidth(0.12);
+      const drawSheetBase = (ctx: CanvasRenderingContext2D, pageIndex: number) => {
+        // 1. Sfondo rosa chiaro (#fdf2f8)
+        ctx.fillStyle = "#fdf2f8";
+        ctx.fillRect(0, 0, pageW, pageH);
 
-      if (style === "quadretti") {
-        const gridGap = 8;
-        for (let x = 10; x < 200; x += gridGap) {
-          doc.line(x, 10, x, 287);
+        // 2. Quadretti o righe
+        ctx.strokeStyle = "#f9a8d4";
+        ctx.lineWidth = Math.max(1, mm(0.16));
+
+        if (style === "quadretti") {
+          const gridGap = 8;
+          ctx.beginPath();
+          for (let x = 10; x < 200; x += gridGap) {
+            ctx.moveTo(mm(x), mm(10));
+            ctx.lineTo(mm(x), mm(287));
+          }
+          for (let y = 10; y < 287; y += gridGap) {
+            ctx.moveTo(mm(10), mm(y));
+            ctx.lineTo(mm(200), mm(y));
+          }
+          ctx.stroke();
+        } else {
+          const lineGap = 9;
+          ctx.beginPath();
+          for (let y = 20; y < 287; y += lineGap) {
+            ctx.moveTo(mm(10), mm(y));
+            ctx.lineTo(mm(200), mm(y));
+          }
+          ctx.stroke();
         }
-        for (let y = 10; y < 287; y += gridGap) {
-          doc.line(10, y, 200, y);
-        }
-      } else {
-        const lineGap = 9;
-        for (let y = 20; y < 287; y += lineGap) {
-          doc.line(10, y, 200, y);
-        }
-      }
 
-      // 3. Highlight Header Line
-      doc.setDrawColor(219, 39, 119);
-      doc.setLineWidth(0.6);
-      doc.line(15, 28, 195, 28);
+        // 3. Linea intestazione
+        ctx.strokeStyle = "#db2777";
+        ctx.lineWidth = mm(0.6);
+        ctx.beginPath();
+        ctx.moveTo(mm(15), mm(28));
+        ctx.lineTo(mm(195), mm(28));
+        ctx.stroke();
 
-      // 4. Add Title Heading
-      doc.setTextColor(31, 41, 55);
-      doc.setFont("Helvetica", "bold");
-      doc.setFontSize(20);
-      doc.text(title || "BlocNote PDF Artist", 15, 24);
+        // 4. Titolo
+        ctx.fillStyle = "#1f2937";
+        ctx.font = `700 ${Math.round(mm(7))}px ${MULTILINGUAL_FONT_STACK}`;
+        ctx.textBaseline = "alphabetic";
+        const heading = (title || "BlocNote PDF Artist") + (pageIndex > 0 ? ` (${pageIndex + 1})` : "");
+        ctx.fillText(heading, mm(15), mm(23), mm(180));
 
-      // 5. Add Body paragraph notes
-      doc.setTextColor(55, 65, 81);
-      doc.setFont("Helvetica", "normal");
-      doc.setFontSize(11);
+        // 5. Timbro vintage in basso a destra
+        ctx.fillStyle = "#fbbf24";
+        ctx.strokeStyle = "#d97706";
+        ctx.lineWidth = mm(0.5);
+        ctx.fillRect(mm(132), mm(264), mm(62), mm(16));
+        ctx.strokeRect(mm(132), mm(264), mm(62), mm(16));
+
+        ctx.fillStyle = "#1e293b";
+        ctx.font = `700 ${Math.round(mm(3.3))}px ${MULTILINGUAL_FONT_STACK}`;
+        ctx.fillText("CREATIVE PDF LAB", mm(136), mm(270));
+        ctx.font = `400 ${Math.round(mm(2.6))}px ${MULTILINGUAL_FONT_STACK}`;
+        ctx.fillText("Generatore di Fogli Vintage", mm(136), mm(276));
+      };
+
+      const measureCanvas = document.createElement("canvas");
+      measureCanvas.width = pageW;
+      measureCanvas.height = pageH;
+      const measureCtx = measureCanvas.getContext("2d");
+      if (!measureCtx) return;
+
+      const bodyFontSize = Math.round(mm(4.2));
+      const lineHeightPx = mm(6.8);
+      measureCtx.font = `400 ${bodyFontSize}px ${MULTILINGUAL_FONT_STACK}`;
 
       const cleanContent = content || "Nessuna nota aggiuntiva.";
-      const lines = doc.splitTextToSize(cleanContent, 175);
-      doc.text(lines, 15, 36);
+      const allLines = wrapCanvasText(measureCtx, cleanContent, mm(178));
 
-      // 6. Draw vintage retro stamp at the bottom corner of the page
-      doc.setFillColor(251, 191, 36);
-      doc.setDrawColor(217, 119, 6);
-      doc.rect(132, 264, 62, 16, "FD");
+      const startY = mm(38);
+      const maxY = mm(255);
+      const linesPerPage = Math.max(1, Math.floor((maxY - startY) / lineHeightPx));
 
-      doc.setTextColor(30, 41, 59);
-      doc.setFont("Helvetica", "bold");
-      doc.setFontSize(9);
-      doc.text("CREATIVE PDF LAB", 136, 270);
-      doc.setFont("Helvetica", "normal");
-      doc.setFontSize(7);
-      doc.text("Generatore di Fogli Vintage", 136, 276);
+      const totalPages = Math.max(1, Math.ceil(allLines.length / linesPerPage));
 
-      // Save output
-      doc.save(`${title.toLowerCase().replace(/\s+/g, "_") || "quaderno_pdf"}.pdf`);
+      for (let p = 0; p < totalPages; p++) {
+        if (p > 0) doc.addPage();
+        const pageCanvas = document.createElement("canvas");
+        pageCanvas.width = pageW;
+        pageCanvas.height = pageH;
+        const ctx = pageCanvas.getContext("2d");
+        if (!ctx) continue;
+
+        drawSheetBase(ctx, p);
+
+        ctx.fillStyle = "#374151";
+        ctx.font = `400 ${bodyFontSize}px ${MULTILINGUAL_FONT_STACK}`;
+        ctx.textBaseline = "alphabetic";
+
+        const slice = allLines.slice(p * linesPerPage, (p + 1) * linesPerPage);
+        slice.forEach((line, idx) => {
+          ctx.fillText(line, mm(15), startY + idx * lineHeightPx);
+        });
+
+        const imgData = pageCanvas.toDataURL("image/png");
+        doc.addImage(imgData, "PNG", 0, 0, 210, 297);
+      }
+
+      const safeFilename =
+        title
+          .trim()
+          .replace(/[^\p{L}\p{N}_-]+/gu, "_")
+          .replace(/^_+|_+$/g, "") || "quaderno_pdf";
+      doc.save(`${safeFilename}.pdf`);
     } catch (e) {
       console.error("Errore generazione PDF: ", e);
     }
@@ -264,9 +441,9 @@ export const PinkPdfNotebookCard: React.FC<DeskCardSoundProps> = ({ playSoundBli
         }`}
       >
         <div>
-          <div className="flex justify-between items-center mb-3">
+          <div className="flex justify-between items-center mb-2">
             <span className="text-[10px] font-mono text-pink-600 font-extrabold uppercase bg-pink-100 px-2 py-0.5 rounded border border-pink-300">
-              🗒️ Quaderno Creatore PDF
+              🗒️ Quaderno PDF Multi-Lingua
             </span>
             <div className="flex gap-1">
               <button
@@ -300,27 +477,77 @@ export const PinkPdfNotebookCard: React.FC<DeskCardSoundProps> = ({ playSoundBli
             </div>
           </div>
 
+          {/* Selettore lingua (IT / Coreano / Russo / Cinese) */}
+          <div className="flex flex-wrap items-center gap-1 mt-2">
+            {NOTEBOOK_LANG_OPTIONS.map((item) => {
+              const active = lang === item.code;
+              return (
+                <button
+                  key={item.code}
+                  type="button"
+                  onClick={() => {
+                    triggerSound(860, "sine", 0.03);
+                    setLang(item.code);
+                  }}
+                  className={`px-2 py-0.5 text-[9px] font-bold rounded cursor-pointer transition-colors ${
+                    active
+                      ? "bg-pink-700 text-white"
+                      : "bg-white/80 text-pink-800 border border-pink-200 hover:bg-pink-100"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Tastierino rapido caratteri per Coreano, Russo e Cinese */}
+          {currentLangConfig.chars.length > 0 && (
+            <div className="mt-2 p-1.5 bg-white/75 border border-pink-200 rounded-lg flex flex-wrap gap-1">
+              {currentLangConfig.chars.map((ch) => (
+                <button
+                  key={ch}
+                  type="button"
+                  onClick={() => handleInsertChar(ch)}
+                  className="px-1.5 py-0.5 min-w-[20px] text-[10px] font-medium bg-pink-50 hover:bg-pink-200 text-stone-900 border border-pink-200 rounded cursor-pointer transition-colors"
+                >
+                  {ch}
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Form Content */}
-          <div className="space-y-2 mt-4 select-text">
+          <div className="space-y-2 mt-3 select-text">
             <div>
               <label className="block text-[8px] font-mono uppercase text-pink-800 font-black tracking-wider">
                 Oggetto / Titolo:
               </label>
               <input
+                ref={titleInputRef}
                 type="text"
+                lang={lang}
                 value={title}
+                onFocus={() => setActiveField("title")}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full bg-white/70 border-b border-pink-300/60 focus:border-pink-500 font-semibold focus:outline-none text-xs text-stone-900 py-1"
+                placeholder={currentLangConfig.placeholderTitle}
+                style={{ fontFamily: MULTILINGUAL_FONT_STACK }}
+                className="w-full bg-white/70 border-b border-pink-300/60 focus:border-pink-500 font-semibold focus:outline-none text-xs text-stone-900 py-1 px-1"
               />
             </div>
             <div>
               <label className="block text-[8px] font-mono uppercase text-pink-800 font-black tracking-wider">
-                Contenuto Quaderno:
+                Contenuto Quaderno (IT · 한국어 · Русский · 中文):
               </label>
               <textarea
+                ref={contentInputRef}
+                lang={lang}
                 value={content}
+                onFocus={() => setActiveField("content")}
                 onChange={(e) => setContent(e.target.value)}
+                placeholder={currentLangConfig.placeholderBody}
                 rows={4}
+                style={{ fontFamily: MULTILINGUAL_FONT_STACK }}
                 className="w-full bg-white/60 border border-pink-200 focus:border-pink-500 rounded p-1.5 focus:outline-none text-[11px] text-stone-800"
               />
             </div>
