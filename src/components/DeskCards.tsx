@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { jsPDF } from "jspdf";
 import "./DeskCards.css";
 
@@ -75,7 +75,7 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
               className="text-center font-bold text-white tracking-wider text-base mt-2 mb-6"
               style={{ textShadow: "0 2px 4px rgba(0,0,0,0.5)" }}
             >
-              📚 Libri
+              📚 Libri &amp; Codex
             </div>
 
             {/* Icon apps grid list */}
@@ -105,14 +105,14 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
               </a>
 
               <a
-                href="https://shelfread-pdf.vercel.app/"
+                href="https://biblioteca-six-plum.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => triggerSound(880, "sine", 0.05)}
                 className="app-tile flex flex-col items-center justify-center p-3.5 rounded-2xl transition-all"
               >
                 <span className="text-3xl mb-1.5">📕</span>
-                <span className="text-[11px] text-white font-bold tracking-tight">Shelfread</span>
+                <span className="text-[11px] text-white font-bold tracking-tight">Biblioteca</span>
                 <span className="text-[7.5px] text-rose-400 font-mono mt-1 opacity-85">LINK DIRETTO ↗</span>
               </a>
 
@@ -125,6 +125,18 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
               >
                 <span className="text-3xl mb-1.5">🗄</span>
                 <span className="text-[11px] text-white font-bold tracking-tight">Z-Library</span>
+                <span className="text-[7.5px] text-teal-400 font-mono mt-1 opacity-85">LINK DIRETTO ↗</span>
+              </a>
+
+              <a
+                href="Laboratorio-programmazione.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => triggerSound(880, "sine", 0.05)}
+                className="app-tile flex flex-col items-center justify-center p-3.5 rounded-2xl transition-all"
+              >
+                <span className="text-3xl mb-1.5">⚛️</span>
+                <span className="text-[11px] text-white font-bold tracking-tight">ReactLab</span>
                 <span className="text-[7.5px] text-teal-400 font-mono mt-1 opacity-85">LINK DIRETTO ↗</span>
               </a>
 
@@ -618,30 +630,95 @@ export const AgendaKanjiCard: React.FC = () => {
   );
 };
 
-// 5. HEADER THE BENTO CHRONICLE (libero, senza wrapper card)
+// 5. HEADER IL MIO HUB LINGUISTICO (libero, senza wrapper card)
+function formatItalianNewspaperDate(date: Date): string {
+  const weekday = new Intl.DateTimeFormat("it-IT", { weekday: "long" }).format(date);
+  const day = new Intl.DateTimeFormat("it-IT", { day: "numeric" }).format(date);
+  const month = new Intl.DateTimeFormat("it-IT", { month: "long" }).format(date);
+  const year = new Intl.DateTimeFormat("it-IT", { year: "numeric" }).format(date);
+  return `${weekday}, ${day} ${month} ${year}`.toUpperCase();
+}
+
 export const BentoChronicleHeader: React.FC = () => {
+  const [today, setToday] = useState<Date>(() => new Date());
+
+  useEffect(() => {
+    const syncDate = () => {
+      const now = new Date();
+      setToday((prev) =>
+        prev.getFullYear() === now.getFullYear() &&
+        prev.getMonth() === now.getMonth() &&
+        prev.getDate() === now.getDate()
+          ? prev
+          : now
+      );
+    };
+
+    const intervalId = window.setInterval(syncDate, 60_000);
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        syncDate();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
+
+  const formattedDate = formatItalianNewspaperDate(today);
+
+  const handleScrollToDesk = () => {
+    const target = document.querySelector("main");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <header className="relative z-30 w-full bg-[#fefce8] text-slate-900 border-2 border-slate-900 rounded-3xl p-6 shadow-[5px_5px_0px_0px_rgba(15,23,42,1)] font-serif space-y-3">
-      <div className="flex flex-wrap items-center justify-between border-b border-slate-900 pb-2 text-[10px] font-mono font-bold tracking-wider text-slate-700 uppercase">
-        <span>EDIZIONE SPECIALE • VOL. XCVI</span>
-        <span>LUNEDÌ, 21 SETTEMBRE 2026</span>
-        <span>METEO: SERENO 24°C • € 1,50</span>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-900 pb-2 text-[10px] font-mono font-bold tracking-wider text-slate-700 uppercase">
+        <span>EDIZIONE SPECIALE • ARCHIVIO POLIGLOTTA</span>
+        <time dateTime={today.toISOString().slice(0, 10)}>{formattedDate}</time>
+        <span>EDIZIONE QUOTIDIANA • SCRIVANIA</span>
       </div>
 
-      <div className="text-center py-2 border-y-2 border-slate-900">
-        <h1 className="text-3xl sm:text-5xl font-black tracking-wider uppercase font-serif">
-          The Bento Chronicle
-        </h1>
-        <p className="text-[10px] sm:text-xs font-mono text-slate-600 tracking-[0.3em] uppercase mt-1">
-          IL QUOTIDIANO MODULARE DEI COMPONENTI TATTILI
-        </p>
+      <div className="py-3 border-y-2 border-slate-900 grid grid-cols-2 md:grid-cols-[minmax(160px,1fr)_auto_minmax(160px,1fr)] items-center gap-x-4 gap-y-3">
+        <div className="col-span-2 md:col-span-1 md:order-2 text-center px-2">
+          <h1 className="text-3xl sm:text-5xl font-black tracking-wider uppercase font-serif text-balance">
+            Il Mio Hub Linguistico
+          </h1>
+          <p className="text-[10px] sm:text-xs font-mono text-slate-600 tracking-[0.28em] uppercase mt-1.5">
+            Tutto il materiale per le lingue
+          </p>
+        </div>
+
+        <div className="md:order-1 text-left md:border-r md:border-slate-900/25 md:pr-4 space-y-1 text-[10px] sm:text-[11px] leading-snug text-slate-700 font-sans">
+          <p className="font-semibold">中文 · 你好 · 汉字练习</p>
+          <p>日本語 · こんにちは · 言葉</p>
+          <p>한국어 · 안녕하세요 · 한글</p>
+          <p dir="rtl" className="text-left">العربية · مرحبا · اللغات</p>
+        </div>
+
+        <div className="md:order-3 text-right md:border-l md:border-slate-900/25 md:pl-4 space-y-1 text-[10px] sm:text-[11px] leading-snug text-slate-700 font-sans">
+          <p className="font-semibold">Русский · Привет · Языки</p>
+          <p>English · Study · Vocabulary</p>
+          <p>Français · Español · Deutsch</p>
+          <p>Ελληνικά · Γλώσσες · Studio</p>
+        </div>
       </div>
 
       <div className="flex items-center justify-between text-xs font-mono pt-1 text-slate-800">
         <span className="font-bold">★ PRIMA PAGINA</span>
-        <span className="text-amber-800 font-bold hover:underline cursor-pointer">
+        <button
+          type="button"
+          onClick={handleScrollToDesk}
+          className="text-amber-800 font-bold hover:underline cursor-pointer bg-transparent border-0 p-0 whitespace-nowrap shrink-0"
+        >
           Sfoglia Indice ➔
-        </span>
+        </button>
       </div>
     </header>
   );
