@@ -85,7 +85,7 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => triggerSound(880, "sine", 0.06)}
-                className="app-tile flex flex-col items-center justify-center p-3.5 bg-amber-950/40 hover:bg-amber-950/60 border border-amber-500/15 hover:border-amber-500/40 rounded-2xl transition-all hover:-translate-y-1"
+                className="app-tile flex flex-col items-center justify-center p-3.5 rounded-2xl transition-all"
               >
                 <span className="text-3xl mb-1.5">📚</span>
                 <span className="text-[11px] text-white font-bold tracking-tight">Libreria</span>
@@ -97,7 +97,7 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => triggerSound(880, "sine", 0.05)}
-                className="app-tile flex flex-col items-center justify-center p-3.5 bg-indigo-950/40 hover:bg-indigo-950/60 border border-indigo-500/15 hover:border-indigo-500/40 rounded-2xl transition-all hover:-translate-y-1"
+                className="app-tile flex flex-col items-center justify-center p-3.5 rounded-2xl transition-all"
               >
                 <span className="text-3xl mb-1.5">🎧</span>
                 <span className="text-[11px] text-white font-bold tracking-tight">VoxLibro</span>
@@ -109,7 +109,7 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => triggerSound(880, "sine", 0.05)}
-                className="app-tile flex flex-col items-center justify-center p-3.5 bg-rose-950/40 hover:bg-rose-950/60 border border-rose-500/15 hover:border-rose-500/40 rounded-2xl transition-all hover:-translate-y-1"
+                className="app-tile flex flex-col items-center justify-center p-3.5 rounded-2xl transition-all"
               >
                 <span className="text-3xl mb-1.5">📕</span>
                 <span className="text-[11px] text-white font-bold tracking-tight">Biblioteca</span>
@@ -121,7 +121,7 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => triggerSound(880, "sine", 0.05)}
-                className="app-tile flex flex-col items-center justify-center p-3.5 bg-teal-950/40 hover:bg-teal-950/60 border border-teal-500/15 hover:border-teal-500/40 rounded-2xl transition-all hover:-translate-y-1"
+                className="app-tile flex flex-col items-center justify-center p-3.5 rounded-2xl transition-all"
               >
                 <span className="text-3xl mb-1.5">🗄</span>
                 <span className="text-[11px] text-white font-bold tracking-tight">Z-Library</span>
@@ -133,7 +133,7 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => triggerSound(880, "sine", 0.05)}
-                className="app-tile flex flex-col items-center justify-center p-3.5 bg-teal-950/40 hover:bg-teal-950/60 border border-teal-500/15 hover:border-teal-500/40 rounded-2xl transition-all hover:-translate-y-1"
+                className="app-tile flex flex-col items-center justify-center p-3.5 rounded-2xl transition-all"
               >
                 <span className="text-3xl mb-1.5">⚛️</span>
                 <span className="text-[11px] text-white font-bold tracking-tight">ReactLab</span>
@@ -145,7 +145,7 @@ export const SmartphoneCard: React.FC<DeskCardSoundProps> = ({ playSoundBlip }) 
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => triggerSound(880, "sine", 0.05)}
-                className="app-tile flex flex-col items-center justify-center p-3.5 bg-teal-950/40 hover:bg-teal-950/60 border border-teal-500/15 hover:border-teal-500/40 rounded-2xl transition-all hover:-translate-y-1"
+                className="app-tile flex flex-col items-center justify-center p-3.5 rounded-2xl transition-all"
               >
                 <span className="text-3xl mb-1.5">📔</span>
                 <span className="text-[11px] text-white font-bold tracking-tight">Lettore Pdf</span>
