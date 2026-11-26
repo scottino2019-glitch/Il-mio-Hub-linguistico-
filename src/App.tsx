@@ -135,8 +135,8 @@ export default function App() {
 
           {/* SEGNAPOSTO 5 (in attesa del file src/components/StaticWhiteboard.jsx) */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1.5deg' } as any}>
-            <DiacriticsArchPad />
-            
+          
+             <StaticWhiteBoard />         
           </div>
 
           {/* SEGNAPOSTO 6 */}
@@ -147,7 +147,8 @@ export default function App() {
 
           {/* SEGNAPOSTO 7 */}
           <div className="desk-card hover-rot-1" style={{ '--hover-rot': '1deg' } as any}>
-            <StaticWhiteBoard />
+              <DiacriticsArchPad />
+           
           </div>
 
           {/* SEGNAPOSTO 8 */}
