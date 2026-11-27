@@ -1,0 +1,152 @@
+====================================================================
+ELENCO COMPLETO DELLE APP E COLLOCAZIONE NELLE CARD
+Il Mio Hub Linguistico (src/App.tsx)
+====================================================================
+
+--------------------------------------------------------------------
+0. MENU DOCK SUPERIORE (nav.top-dock - barra fissa in alto)
+--------------------------------------------------------------------
+1. Lingua Cinese (🀄)
+   URL: https://lingua-cinese.vercel.app/
+2. Lingua Inglese (🇬🇧)
+   URL: https://english-hub-orcin-zeta.vercel.app/
+3. Lingua Coreana (🇰🇷)
+   URL: https://linguacoreana.netlify.app/
+4. Lingua Russa (🇷🇺)
+   URL: https://lingua-russa.vercel.app/
+5. Scuola Virtuale (🎓)
+   URL: https://scuola-virtuale.netlify.app/
+6. Pdf Home (✍)
+   File locale: public/pdf-home.html
+   Contiene al suo interno 3 app collegate:
+   - Quaderni & Lettore PDF -> https://quaderni-e-lettore-pdf.vercel.app/
+   - Multi Lettore -> https://lettore-pdf-affiancato.ai.studio/
+   - Libro Folle -> https://libro-folle.vercel.app/
+7. Cinese OS (📱)
+   URL: https://chinese-os-cell.vercel.app/
+8. Ricerca immagini (🖼)
+   URL: https://photo-finder-kohl.vercel.app/
+9. Musica (🎧)
+   URL: https://winamp-swart.vercel.app/
+10. Quaderni (📝)
+    URL: https://quaderni-di-scrittura.vercel.app/
+
+--------------------------------------------------------------------
+HEADER: BentoChronicleHeader (src/components/DeskCards.tsx)
+--------------------------------------------------------------------
+- Testata editoriale multilingue "Il Mio Hub Linguistico" con data
+  dinamica e pulsante "Sfoglia Indice".
+
+====================================================================
+GRIGLIA MASONRY PRINCIPALE (SEGNAPOSTO 1 -> 16)
+====================================================================
+
+[CARD 1] Retro iPod Player (Iframe inline in src/App.tsx)
+- Tipo: App integrata via iframe
+- App: Retro iPod Player
+- URL: https://i-pod-audio-player.vercel.app/
+
+[CARD 2] Quaderno Hanzi - Scrittura Cinese (QuadernoCineseCard - src/components/QuaderniScritturaCards.tsx)
+- Tipo: Widget interattivo di pratica calligrafica (griglie 田字格 / 米字格) + indice app collegate
+- App collegate (4):
+  1. Skitter ("Crea fogli di scrittura") -> https://hanzi-pro-build.netlify.app/
+  2. HanziCraft ("Decomposizione Cinese") -> https://quaderni-per-esercizi.vercel.app/
+  3. Studio Calligrafico ("Pratica libera") -> https://studio-calligrafico.netlify.app/
+  4. Hanzi Studio Pro ("Comporre frasi") -> https://hanzi-studio-pro.vercel.app//
+
+[CARD 3] Quaderno Hangul - Scrittura Coreana (QuadernoCoreanoCard - src/components/QuaderniScritturaCards.tsx)
+- Tipo: Widget interattivo di pratica Hangul (griglie 원고지 / Righe) + indice app collegate
+- App collegate (5):
+  1. Write It!! (1) ("Pratica Hangul") -> https://scrittura-coreana.vercel.app/
+  2. Write It!! (2) ("Fogli esercizi") -> https://generatore-di-fogli-di-scrittura-co.vercel.app/
+  3. Mirinae Korean ("Eserciziario") -> https://eserciziario-di-lingua-coreana.vercel.app/
+  4. Hangeul Studio ("Eserciziario") -> https://scrittura-coreana.vercel.app/
+  5. Wongoji Studio ("Fogli") -> https://wongoji-creator.netlify.app/
+
+[CARD 4] Smartphone Iframe Browser (MobileIframe - src/components/MobileIframe.tsx)
+- Tipo: Browser/iframe mobile interattivo con barra URL
+- App precaricata (initialUrl): Lingua Planner
+- URL: https://lingua-planner.netlify.app/
+
+[CARD 5] Bacheca Post-it (StaticWhiteBoard - src/components/StaticWhiteBoard.tsx)
+- Tipo: Widget locale (lavagna di sughero con note post-it salvate in localStorage)
+- Nessun link esterno.
+
+[CARD 6] Accesso Rapido · Preferiti (FavoritesCard - src/components/FavoritesCard.tsx)
+- Tipo: Widget locale personalizzabile (griglia preferiti salvata in localStorage)
+- Predefinito vuoto; permette all'utente di aggiungere, fissare e rimuovere link propri.
+
+[CARD 7] Tastierino Caratteri Speciali & Cirillico (DiacriticsArchPad - src/components/DiacriticsArchPad.tsx)
+- Tipo: Widget locale di composizione caratteri (Vocali, Consonanti, Fonetici cirillici/speciali + copia negli appunti)
+- Nessun link esterno.
+
+[CARD 8] Smartphone "Librerie e Editor" (SmartphoneCard - src/components/DeskCards.tsx)
+- Tipo: Smartphone con griglia icone app a link diretto
+- App collegate (6):
+  1. Libreria (📚) -> https://libreria-pdf.vercel.app/
+  2. VoxLibro (🎧) -> https://vox-libro.vercel.app/
+  3. Shelfread (📕) -> https://shelfread-pdf.vercel.app/
+  4. Z-Library (🗄) -> https://1lib.sk/
+  5. AsianText (✍) -> https://asiantext-designer.vercel.app/
+  6. Scriba (✍) -> https://scriba-multilinga.netlify.a  (nota: URL troncato nel codice originale)
+
+[CARD 9] Macchina da Scrivere Royal 1954 (TypewriterEditorCard - src/components/TypewriterEditorCard.tsx)
+- Tipo: Mini editor di testo locale con tastiera virtuale e salvataggio file in localStorage
+- Nessun link esterno.
+
+[CARD 10] Roji Card (RojiCard - src/components/DeskCards.tsx)
+- Tipo: App integrata via iframe
+- App: roji
+- URL: https://roji-tawny.vercel.app/
+
+[CARD 11] Tastierino Compositore Hangul (DiacriticsArchKor - src/components/DiacriticsArchKor.tsx)
+- Tipo: Widget locale di composizione sillabe Hangul (Consonanti, Vocali, Doppio Batchim + copia negli appunti)
+- Nessun link esterno.
+
+[CARD 12] Mini Smartphone "HOME APP" (MiniPhoneCard - src/components/MiniPhoneCard.tsx)
+- Tipo: Smartphone compatto con griglia di 10 app rapide
+- App collegate (10):
+  1. eserciziario (✍) -> https://eserciziario-di-lingua-coreana.vercel.app/
+  2. HanziCraft (㊗) -> https://hanzicraft.com/dashboard
+  3. Editor (📝) -> https://editor-multiligua.netlify.app/
+  4. Azbuka (🪆) -> https://azbuka-viva-iota.vercel.app/
+  5. Maestra (🇰🇷) -> https://maestra-hangul.netlify.app/
+  6. Vocal Tutor (🎧) -> https://vocaltutor.vercel.app/
+  7. AudioBook (🇷🇺) -> https://russo-audiobook.netlify.app/
+  8. Lettore Russo (🗣) -> https://lettore-russo.vercel.app/
+  9. PoliglottaPdf (🌍) -> https://poliglotta-pdf.vercel.app/
+  10. Quaderno (📑) -> https://quaderni-e-lettore-pdf.vercel.app/
+
+[CARD 13] Quaderno Cirillico - Scrittura Russa (QuadernoRussoCard - src/components/QuadernoRussoCard.tsx)
+- Tipo: Widget interattivo di pratica cirillico (rigatura Propisi / Righe) + link integrati
+- App collegate (2):
+  1. Write It! -> https://generatore-di-esercizi-di-scrittura.vercel.app/
+  2. Russo Corsivo -> https://russo-corsivo-cirillico.vercel.app/
+
+[CARD 14] Quaderno PDF Multi-Lingua / Rosa a Spirale (PinkPdfNotebookCard - src/components/DeskCards.tsx)
+- Tipo: Generatore PDF locale (IT, 한국어, Русский, 中文, quadretti/righe) + lista editor PDF collegati
+- App collegate (3):
+  1. Pdf Editor (Quadretti) -> public/editor-pdf-quadretti.html (file locale)
+  2. Pdf Editor (Righe) -> public/righe-pdf-editor.html (file locale)
+  3. Hanja/Hangul -> https://hanja-hangul-studio.netlify.app/
+
+[CARD 15] L'Agenda dei Kanji (AgendaKanjiCard - src/components/DeskCards.tsx)
+- Tipo: App integrata via iframe (scala 90%)
+- App: L'Agenda dei Kanji
+- URL: https://l-agenda-dei-kanji.scottino2019.workers.dev/
+
+[CARD 16] Console GameBoy-3000 (GameBoy3000Card - src/components/GameBoy3000Card.tsx)
+- Tipo: Console retro con giochi HTML locali caricati in iframe da /public/
+- App / Giochi collegati (3):
+  1. Gioco15 -> public/gioco-15.html
+  2. Gioco152 -> public/gioco-15 (1).html
+  3. Memory -> public/memory-vocabolario-italiano-english.html
+
+====================================================================
+SEZIONE INFERIORE A LARGHEZZA PIENA (FUORI DALLA GRIGLIA A COLONNE)
+====================================================================
+
+[CARD 17] Cinema Video Card (CinemaVideoCard - src/components/CinemaVideoCard.tsx)
+- Tipo: Player video con playlist salvata in localStorage (supporta YouTube, Vimeo e link diretti .mp4)
+- Video demo predefinito: "Demo: For Bigger Escapes"
+  URL: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4
